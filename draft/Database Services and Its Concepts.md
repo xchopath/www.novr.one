@@ -13,10 +13,10 @@ Table:
 SQL Query:
 
 ```
-SELECT * FROM column_3 = row_2
+SELECT * FROM table WHERE column_3 = row_2
 ```
 
-Mongo Query:
+MongoDB Query:
 
 ```
 db.table.find({column_3: row_2})
@@ -47,6 +47,8 @@ Result:
 
 ### 1. RDBMS / SQL Based
 
+Run a query: `SELECT * FROM employee_table`
+
 | name | job | salary |
 |:----:|:---:|:------:|
 | Alam | DBA | 50.000 |
@@ -57,6 +59,8 @@ Result:
 - Structured data
 
 ### 2. Document-Oriented
+
+Run a query: `db.employee.find({})`
 
 ```
 [
@@ -69,12 +73,14 @@ Result:
 
 ### 3. Key-Value
 
-Get all `PENDING` data.
-
 ```
-PENDING TRX111222333
-        TRX444555666
-        TRX777888999
+query> KEYS *TRX*
+TRX:111222333
+TRX:444555666
+TRX:777888999
+
+query> GET TRX:111222333
+"PRODUCT789|QRIS|50000|PENDING"
 ```
 
 - In-memory data store
@@ -82,7 +88,7 @@ PENDING TRX111222333
 
 ### 4. Search Database
 
-Search: `Rio NOC`.
+Run a search query: `url/?q=*:Rio+NOC`
 
 ```
 [
