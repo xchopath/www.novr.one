@@ -60,8 +60,8 @@ Result:
 
 ```
 [
-	{"name": "Edi Riyanto", "roles": "DevOps", "resign": false, "project": ["Deploy", "RND"]},
-	{"name": "Deri Satria", "roles": "DevOps", "resign": true}
+	{"name": "Edi Yamamoto", "roles": "DevOps", "resign": false, "project": ["Deploy", "RND"]},
+	{"name": "Deri S", "roles": "DevOps", "resign": true}
 ]
 ```
 
