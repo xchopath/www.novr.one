@@ -4,7 +4,9 @@ Diposting pada _05-May-2023_ oleh _Novran Faathir_.
 
 --------------------
 
-Saya akan menuliskan bagaimana saya menganalisa emiten saham yang sedang Undervalue. Namun perlu digaris bawahi, saya pun masih belum berpengalaman di bidang ini dan masih sangat pemula, saya hanya menuliskan hasil belajar dari berbagai macam referensi untuk ditinjau ulang oleh saya sendiri di masa depan. Semoga dapat bermanfaat untuk yang lain dan bilamana terdapat kesalahan mohon maaf serta mohon untuk dikoreksi.
+Saya akan menuliskan bagaimana saya menganalisa emiten saham yang sedang **Undervalue**. Namun perlu digaris bawahi, saya pun masih belum berpengalaman di bidang ini dan masih sangat pemula, saya hanya menuliskan hasil belajar dari berbagai macam referensi untuk ditinjau ulang oleh saya sendiri di masa depan. Semoga dapat bermanfaat untuk yang lain dan bilamana terdapat kesalahan mohon maaf serta mohon untuk dikoreksi.
+
+Di bawah ini terdapat beberapa aspek yang saya perhatikan untuk melakukan _Screening_ awal.
 
 ## 1. Price to Book Value (PBV) di bawah 1
 
