@@ -23,3 +23,17 @@ Debt to Equity Ratio (DER) digunakan untuk menimbang hutang perusahaan yang di m
 ## 4. Return on Equity (RoE) di atas 10%
 
 RoE adalah pembanding jumlah pendapatan bersih dengan jumlah total modal. Di mana jika perusahaan yang memiliki RoE yang tinggi maka dapat dikatakan perusahaan tersebut menggunakan modalnya dengan baik dan efisien.
+
+--------------------
+
+## Contoh
+
+Berikut ini adalah contoh tabel saham yang bisa dibilang *Undervalue*, sebagai contoh saya menggunakan 2 emiten ternama yaitu **PT Indah Kiat Pulp and Paper Tbk (INKP)** dan **PT Astra Otoparts Tbk (AUTO)**.
+
+<sub>* Tabel ini dibuat pada tanggal 5 May 2023</sub>
+
+| Ticker | Price | PBV  |   DER  |  RoE  |  PER  | EPS 2020 | EPS 2021 | EPS 2022 |
+|:------:|:-----:|:----:|:------:|:-----:|:-----:|:--------:|:--------:|:--------:|
+|  INKP  | 7125  | 0.44 | 69.64% | 15.3% |  2.9  |    758   |   1375   |   2440   |
+|  AUTO  | 1800  | 0.70 | 45.35% | 14%   |  5.10 |     0    |    127   |    275   |
+
