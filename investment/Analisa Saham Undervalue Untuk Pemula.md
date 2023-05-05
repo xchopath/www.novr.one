@@ -1,5 +1,11 @@
 # Analisa Saham Undervalue Untuk Pemula
 
+Diposting pada _05-May-2023_ oleh _Novran Faathir_.
+
+--------------------
+
+Saya akan menuliskan bagaimana saya menganalisa emiten saham yang sedang Undervalue. Namun perlu digaris bawahi, saya pun masih belum berpengalaman di bidang ini dan masih sangat pemula, saya hanya menuliskan hasil belajar dari berbagai macam referensi untuk ditinjau ulang oleh saya sendiri di masa depan. Semoga dapat bermanfaat untuk yang lain dan bilamana terdapat kesalahan mohon maaf serta mohon untuk dikoreksi.
+
 ## 1. Price to Book Value (PBV) di bawah 1
 
 Price to Book Value (PBV) adalah rasio keuangan yang bisa digunakan untuk menilai valuasi sebuah saham itu sedang murah atau tidak. Sebagai contoh di sini terdapat perusahaan yang memiliki PBV 0.5 dengan asumsi harga saham 300 maka dapat dikatakan _harga saham_ tersebut sedang murah, setengah harga dari harga wajarnya yaitu 600. Harga wajar saham dapat dilihat pada Book Value per Share (BVPS).
@@ -37,3 +43,6 @@ Berikut ini adalah contoh tabel saham yang bisa dibilang *Undervalue*, sebagai c
 |  INKP  | 7125  | 0.44 | 69.64% | 15.3% |  2.9  |    758   |   1375   |   2440   |
 |  AUTO  | 1800  | 0.70 | 45.35% | 14%   |  5.10 |     0    |    127   |    275   |
 
+Tabel di atas bukan ajakan untuk membeli namun hanya sebagai contoh saja karena masih banyak saham yang memiliki valuasi lebih murah dari saham di atas. Di sini saya menggunakan aplikasi **RTI Business** untuk melakukan analisanya.
+
+Terima kasih.
