@@ -1,6 +1,6 @@
 # Analisa Saham Undervalue Untuk Pemula
 
-Diposting pada _05-May-2023_ oleh _Novran Faathir_.
+Diposting pada **05-May-2023** oleh _Novran Faathir_.
 
 --------------------
 
@@ -16,17 +16,15 @@ Price to Book Value (PBV) adalah rasio keuangan yang bisa digunakan untuk menila
 
 Price Earning Ratio (PER) adalah suatu rasio keuangan yang digunakan untuk perkiraan potensi keuntungan dari perusahaan. Misal terdapat perusahaan yang memiliki PER 9, maka dapat diasumsikan bahwa perusahaan dapat mengembalikan keuntungan kepada investor selama 9 tahun.
 
-Namun perlu diperhatikan bahwa terdapat parameter lain untuk mempertingkan PER seperti Earning Per Share (EPS).
+Namun perlu diperhatikan bahwa terdapat parameter lain untuk mempertimbangkan PER seperti Earning Per Share (EPS).
 
-```
-Earning per Share (EPS) adalah hasil perhitungan dari laba bersih perusahaan dibagi dengan jumlah saham yang beredar.
-```
+_Earning per Share (EPS) adalah_ hasil perhitungan dari laba bersih perusahaan dibagi dengan jumlah saham yang beredar.
 
-Bilamana EPS pertahunnya itu turun maka PER tidak dapat menjadi acuan perusahaan sedang undervalue dan mungkin saja perusahaan sedang menuju kebangkrutan.
+Bilamana EPS pertahunnya itu turun maka PER tidak dapat menjadi acuan perusahaan sedang _Undervalue_ dan mungkin saja perusahaan sedang menuju kebangkrutan.
 
 ## 3. Debt to Equity Ratio (DER) di bawah 0.9 atau 90%
 
-Debt to Equity Ratio (DER) digunakan untuk menimbang hutang perusahaan yang di mana memiliki rumus `Total Utang / Total Ekuitas = DER`. Maka jika terdapat perusahaan yang memiliki DER di bawah 0.9 atau 90% dapat dikatakan bahwa perusahaan tersebut memiliki neraca keuangan yang sehat dengan kata lain perusahaan memiliki _ekuitas lebih besar dari hutang_ yang dimiliki.
+Debt to Equity Ratio (DER) biasa digunakan untuk menimbang hutang perusahaan yang di mana memiliki rumus `Total Utang / Total Ekuitas = DER`. Maka jika terdapat perusahaan yang memiliki DER di bawah 0.9 atau 90% dapat dikatakan bahwa perusahaan tersebut memiliki neraca keuangan yang sehat dengan kata lain perusahaan memiliki _ekuitas lebih besar dari hutang_ yang dimiliki.
 
 ## 4. Return on Equity (RoE) di atas 10%
 
