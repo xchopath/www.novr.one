@@ -17,13 +17,19 @@ composer create-project laravel/laravel=9.5.2 voyagerproject
 cd voyagerproject/
 ```
 
+Create a Database
+```
+mysql -u root -p --protocol=tcp
+mysql> CREATE DATABASE myapp;
+```
+
 Adjust the `.env`
 ```
 APP_URL=http://localhost:8000
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=voyager
+DB_DATABASE=myapp
 DB_USERNAME=username
 DB_PASSWORD=password
 ```
@@ -45,5 +51,5 @@ php artisan voyager:admin admin@email.com --create
 
 Start the App
 ```
-php artisan serve --host=0.0.0.0 --port=8080 
+php artisan serve --host=0.0.0.0 --port=8000 
 ```
