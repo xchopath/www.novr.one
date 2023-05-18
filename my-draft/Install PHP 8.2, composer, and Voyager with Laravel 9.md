@@ -2,7 +2,7 @@
 
 Install PHP 8.2
 ```
-sudo apt install php8.2 php8.2-dev php8.2-mbstring -y
+sudo apt install php8.2 php8.2-dev php8.2-mbstring php8.2-gd -y
 ```
 
 Install Composer
