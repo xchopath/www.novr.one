@@ -1,0 +1,34 @@
+title: novr.one
+author:
+  name: xchopath
+  email: novran@zerobyte.id
+
+description: >
+  Just a xchopath's brain-cache.
+
+theme: minima
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+header_pages:
+  - index.md
+  - security-engineering.md
+  - sysops.md
+
+minima:
+  skin: dark
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      permalink: :path
+
+#  - scope:
+#      path: "_posts/sysops"
+#      type: posts
+#    values:
+#      permalink: sysops/:title
