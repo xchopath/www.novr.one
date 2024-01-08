@@ -25,3 +25,5 @@ int main()
     return 0;
 }
 ```
+
+nmap -p- -T4 -Pn -A 10.10.10.1 -vvv
