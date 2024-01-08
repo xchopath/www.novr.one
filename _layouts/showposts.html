@@ -34,7 +34,7 @@
         {% if filtered_posts.size > 0 %}
           <div class="bg-success p-0 m-0 mt-3 p-1">
             <span class="badge text-light fw-normal bg-dark rounded-0">drwxr--r--</span>
-            <span class="text-light fw-bold">{{ subpostpath }}</span>
+            <span class="text-capitalize text-light fw-bold">{{ subpostpath | replace: "-", " " }}</span>
           </div>
           <ul class="list-group list-group-flush bg-transparent">
             {% for post in filtered_posts %}
