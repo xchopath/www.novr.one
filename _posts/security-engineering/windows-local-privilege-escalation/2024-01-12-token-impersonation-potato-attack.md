@@ -15,33 +15,37 @@ Token ini merepresentasikan berisi informasi:
 - Integrity level
 - Privilege yang dipegang oleh pengguna atau grup tempat pengguna berada
 
-## Why Impersonation Exists?
+## Why "Impersonation" Exists?
 
-Impersonation adalah kemampuan untuk menjalankan sebuah tugas menggunakan hak istimewa atau identitas pengguna lain. Kita ambil contoh Service IIS (Web Server), ketika User yang menjalankan service IIS bukanlah `NT AUTHORITY\SYSTEM` (LocalSystem), proses tersebut mungkin tidak memiliki privilege yang cukup untuk mengakses beberapa sumber daya di sistem. Namun, dengan menggunakan impersonasi, layanan masih dapat mencoba menjalankan tugas tertentu dengan hak istimewa yang lebih tinggi dan layanan masih dapat melanjutkan tugasnya tanpa harus berhenti hanya karena pengguna bukan LocalSystem.
-
-Jadi yang perlu digaris bawahi yaitu User masih dapat mengakses sumber daya tertentu meskipun tanpa Role yang setara.
+Impersonation adalah kemampuan untuk menjalankan sebuah tugas menggunakan hak istimewa atau identitas pengguna lain. Kita ambil contoh Service IIS (Web Server), ketika User yang menjalankan service IIS bukanlah `NT AUTHORITY\SYSTEM` (LocalSystem), maka proses yang dijalankan oleh service tersebut mungkin tidak memiliki privilege yang cukup untuk mengakses beberapa sumber daya di sistem. Namun, dengan menggunakan Impersonation, layanan IIS masih dapat menjalankan tugas tertentu dengan hak istimewa tanpa role khusus dan layanan masih dapat melanjutkan tugasnya tanpa harus terhenti hanya karena user IIS tidak memiliki Role yang setara dengan LocalSystem.
 
 <br/>
 
 # Impersonate Privileges
 
-Mari kita bahas dengan lebih sederhana, kita akan membahas terkait privilege `SeImpersonatePrivilege` dan `SeAssignPrimaryTokenPrivilege`.
+Mari kita bahas sedikit teknis terkait privilege `SeImpersonatePrivilege` dan `SeAssignPrimaryTokenPrivilege`.
 
-SeImpersonatePrivilege adalah hak istimewa di Windows yang memungkinkan kita untuk menyamar sebagai pengguna lain (Impersonation) untuk menjalankan sebuah tugas di bawah naungan user tersebut, begitu juga dengan SeAssignPrimaryTokenPrivilege. Jika kita memiliki SeImpersonatePrivilege, kita dapat menggunakan fungsi `CreateProcessWithTokenW()` untuk membuat proses baru dengan token yang kita miliki. Sebagai alternatifnya, SeAssignPrimaryTokenPrivilege memungkinkan kita untuk menggunakan fungsi `CreateProcessAsUserA()`, yang memiliki fungsi serupa.
+SeImpersonatePrivilege adalah hak istimewa di Windows yang memungkinkan kita untuk menyamar sebagai User lain (Impersonation) untuk menjalankan sebuah tugas di bawah naungan User tersebut, begitu juga dengan SeAssignPrimaryTokenPrivilege. Jika kita memiliki SeImpersonatePrivilege, kita dapat menggunakan fungsi `CreateProcessWithTokenW()` untuk membuat proses baru dengan token yang kita miliki. Sebagai alternatifnya, SeAssignPrimaryTokenPrivilege memungkinkan kita untuk menggunakan fungsi `CreateProcessAsUserA()`, yang memiliki fungsi serupa.
+
+Windows API Functions:
+- [CreateProcessWithTokenW](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-createprocesswithtokenw) (SeImpersonatePrivilege needed) adalah fungsi dalam pemrograman Windows API yang digunakan untuk membuat proses baru menggunakan token keamanan (security token) dari pengguna atau sesi tertentu.
+- [CreateProcessAsUserA](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-createprocessasusera) (SeAssignPrimaryTokenPrivilege needed) adalah fungsi dalam Windows API yang mirip dengan CreateProcessWithTokenW. Namun, CreateProcessAsUserA digunakan untuk membuat proses baru sebagai pengguna tertentu.
 
 <br/>
 
-# Potato Attacks
-
-## 1. RottenPotato - Abuse Impersonation through `CoGetInstanceFromIStorage() function`.
-
-<https://learn.microsoft.com/en-us/windows/win32/api/objbase/nf-objbase-cogetinstancefromistorage>
+Check privilege using CMD:
+```powershell
+whoami /priv
 ```
-| Windows
---| Apps
-----| Win32
-------| API
---------| Component Object Model (COM)
-----------| Objbase.h
-------------| CoGetInstanceFromIStorage() function
-```
+
+<br/>
+
+# Impersonation Exploit to Privilege Escalation
+
+![Potato Exploit](https://github.com/xchopath/www.novr.one/assets/44427665/ad2b9f32-a642-4328-8e96-b8f4d20fbb21)
+
+Potato / Impersonation Exploits:
+- [JuicyPotato](https://github.com/ohpe/juicy-potato) - All windows version until 2018.
+- [PrintSpoofer](https://github.com/itm4n/PrintSpoofer) - All windows version until 2019.
+- [RoguePotato](https://github.com/antonioCoco/RoguePotato) - All windows version until 2020.
+- [GodPotato](https://github.com/BeichenDream/GodPotato) - All windows version until 2022.
