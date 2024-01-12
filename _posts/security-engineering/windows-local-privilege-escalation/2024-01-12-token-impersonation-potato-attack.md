@@ -45,7 +45,7 @@ whoami /priv
 ![Potato Exploit](https://github.com/xchopath/www.novr.one/assets/44427665/ad2b9f32-a642-4328-8e96-b8f4d20fbb21)
 
 Potato / Impersonation Exploits:
-- [JuicyPotato](https://github.com/ohpe/juicy-potato) - All windows version until 2018.
+- [RottenPotato](https://github.com/foxglovesec/RottenPotato) / [JuicyPotato](https://github.com/ohpe/juicy-potato) - All windows version until 2018.
 - [PrintSpoofer](https://github.com/itm4n/PrintSpoofer) - All windows version until 2019.
 - [RoguePotato](https://github.com/antonioCoco/RoguePotato) - All windows version until 2020.
 - [GodPotato](https://github.com/BeichenDream/GodPotato) - All windows version until 2022.
