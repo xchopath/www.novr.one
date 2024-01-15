@@ -20,7 +20,7 @@ sudo apt-get install nginx-extras
 
 <br/>
 
-# Setup http function in nginx.conf
+# Configure nginx.conf
 
 Create a file to store Cloudflare IP list.
 ```sh
