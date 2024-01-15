@@ -22,17 +22,17 @@ sudo apt-get install nginx-extras
 
 # Configure nginx.conf
 
-Create a file to store Cloudflare IP list.
+Create a file to store Cloudflare whitelisted IP list.
 ```sh
-vim /etc/nginx/cfwhitelist.conf
+vim /etc/nginx/cloudflare-whitelist.conf
 ```
 
 Use this command to get the IP list from Cloudflare.
 ```bash
-{ curl -s "https://www.cloudflare.com/ips-v4"; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "set_real_ip_from "$1";"}' && echo "real_ip_header CF-Connecting-IP;" && echo "" && echo "geo \$realip_remote_addr \$cf_ipswhitelist {" && echo "\tdefault 0;" && { curl -s "https://www.cloudflare.com/ips-v4"; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "\t"$1" 1;"}' && echo "}"
+{ curl -s "https://www.cloudflare.com/ips-v4"; echo ""; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "set_real_ip_from "$1";"}' && echo "real_ip_header CF-Connecting-IP;" && echo "" && echo "geo \$realip_remote_addr \$cloudflareips {" && echo "\tdefault 0;" && { curl -s "https://www.cloudflare.com/ips-v4"; echo ""; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "\t"$1" 1;"}' && echo "}"
 ```
 
-![cfipwhitelist](https://github.com/xchopath/www.novr.one/assets/44427665/1fb603f0-6fe0-4b87-a92d-f47ca650047b)
+![cloudflare-whitelist.conf](https://github.com/xchopath/www.novr.one/assets/44427665/73d0a764-efdc-488a-aa4b-759be1d17fb3)
 
 <br/>
 
@@ -40,12 +40,12 @@ Add the configuration file to `/etc/nginx/nginx.conf`:
 ```sh
 vim /etc/nginx/nginx.conf
 ```
+
 ```
-include /etc/nginx/cfwhitelist.conf;
+include /etc/nginx/cloudflare-whitelist.conf;
 ```
 
-![cfwhitelist nginx conf](https://github.com/xchopath/www.novr.one/assets/44427665/535132fd-cbe1-437e-ae35-d1c56dd21144)
-
+![nginx.conf](https://github.com/xchopath/www.novr.one/assets/44427665/34b787c6-7c69-4f54-b5a3-8e8c573418f3)
 
 <br/>
 
@@ -55,12 +55,13 @@ include /etc/nginx/cfwhitelist.conf;
 Configure host file / virtual host file add this configuration below.
 
 ```sh
-if ($cf_ipswhitelist != 1) {
+if ($cloudflareips != 1) {
 	return 403;
 }
 ```
 
-![cfwl](https://github.com/xchopath/www.novr.one/assets/44427665/3c2e9e24-4f24-4dab-8504-08620cdd1a11)
+![host configuration](https://github.com/xchopath/www.novr.one/assets/44427665/23cb9faa-ed91-4407-8856-3e947ea401d0)
+
 
 <br/>
 
