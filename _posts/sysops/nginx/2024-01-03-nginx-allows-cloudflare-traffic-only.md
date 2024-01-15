@@ -20,33 +20,48 @@ sudo apt-get install nginx-extras
 
 <br/>
 
-## Setup http function in nginx.conf
+# Setup http function in nginx.conf
 
-Config maker for `/etc/nginx/nginx.conf` inside of `http { ... }`.
+Create a file to store Cloudflare IP list.
+```sh
+vim /etc/nginx/cfwhitelist.conf
+```
 
-Bash:
+Use this command to get the IP list from Cloudflare.
 ```bash
 { curl -s "https://www.cloudflare.com/ips-v4"; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "set_real_ip_from "$1";"}' && echo "real_ip_header CF-Connecting-IP;" && echo "" && echo "geo \$realip_remote_addr \$cf_ipswhitelist {" && echo "\tdefault 0;" && { curl -s "https://www.cloudflare.com/ips-v4"; curl -s "https://www.cloudflare.com/ips-v6"; } | awk '{print "\t"$1" 1;"}' && echo "}"
 ```
 
-<table>
-  <td>
-    <img src="https://github.com/xchopath/www.novr.one/assets/44427665/fc09cf6c-323f-44be-bd88-0c2addf969ed"/>
-  </td>
-  <td>
-    <img src="https://github.com/xchopath/www.novr.one/assets/44427665/6cc00180-48b1-44f3-a93c-94dd52b4afb7">
-  </td>
-</table>
+![cfipwhitelist](https://github.com/xchopath/www.novr.one/assets/44427665/1fb603f0-6fe0-4b87-a92d-f47ca650047b)
 
 <br/>
 
-## Enable rule in Server Host / Virtual Host
+Add the configuration file to `/etc/nginx/nginx.conf`:
+```sh
+vim /etc/nginx/nginx.conf
+```
+```
+include /etc/nginx/cfwhitelist.conf;
+```
 
-Config inside the `server { ... }` in Host Config File (For example: /etc/nginx/conf.d/default):
+![cfwhitelist nginx conf](https://github.com/xchopath/www.novr.one/assets/44427665/535132fd-cbe1-437e-ae35-d1c56dd21144)
+
+
+<br/>
+
+
+# Implement to Server Host / Virtual Host Configuration
+
+Configure host file / virtual host file add this configuration below.
+
 ```sh
 if ($cf_ipswhitelist != 1) {
 	return 403;
 }
 ```
+
+![cfwl](https://github.com/xchopath/www.novr.one/assets/44427665/3c2e9e24-4f24-4dab-8504-08620cdd1a11)
+
+<br/>
 
 Restart!
