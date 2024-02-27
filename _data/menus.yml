@@ -1,0 +1,11 @@
+- title: "#home"
+  url: /
+  external: false
+
+- title: "#whoami"
+  url: /about/
+  external: false
+
+- title: "#blogroll"
+  url: /all-posts/
+  external: false

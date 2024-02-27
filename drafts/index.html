@@ -1,0 +1,33 @@
+---
+title: Drafts
+layout: page
+---
+
+<div id="results-container"></div>
+
+<script>
+const github_user = '{{ site.author.github }}';
+const github_repo = '{{ site.author.gh_page_repo }}';
+const url = 'https://api.github.com/repos/' + github_user + '/' + github_repo + '/contents' + window.location.pathname;
+
+let contentsHtml = '';
+
+fetch(url)
+  .then(response => response.json())
+  .then(data => {
+    for (let row of data) {
+      if ((/.md$/).test(row.name)) {
+        const linkName = row.name.replace('.md', '');
+        const linkFile = row.path.replace('.md', '');
+        contentsHtml += `<article class="post-item" id="results-container">`;
+        contentsHtml += `<span class="post-item-date">draft</span>`;
+        contentsHtml += `<h3 class="post-item-title"><a href="/${linkFile}">${linkName}</a></h3>`;
+        contentsHtml += `</article>`;
+      }
+    }
+    document.getElementById('results-container').innerHTML = contentsHtml;
+  })
+  .catch(error => {
+    console.error(error);
+  });
+</script>
