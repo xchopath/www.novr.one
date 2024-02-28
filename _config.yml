@@ -1,7 +1,7 @@
 # Site settings
 title: Novr.one Documentations
 description: >-
-  Just a boring infosec guy who likes writing random things and the astronaut who enjoys exploring cyber(space).
+  Just a boring infosec guy who likes writing random things and the fake-astronaut who enjoys exploring cyber(space).
 lang: en-US
 timezone: Asia/Jakarta
 image: assets/img/ogp.png 
@@ -12,7 +12,7 @@ mode: dark
 author:
   name: Novran F.
   bio: >-
-    “Just a boring infosec guy who likes writing random things and the astronaut who enjoys exploring cyber(space).”
+    “Just a boring infosec guy who likes writing random things and the fake-astronaut who enjoys exploring cyber(space).”
   username: xchopath
   github: xchopath
   gh_page_repo: www.novr.one
