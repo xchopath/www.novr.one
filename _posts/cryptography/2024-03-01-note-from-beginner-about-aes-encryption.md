@@ -28,7 +28,7 @@ Sebenarnya, AES bukanlah satu-satunya enkripsi yang menggunakan model simetris, 
 
 Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seperti CBC, OCB, CFB, OFB, CTR, GCM, CCM, XTS, SIV, EAX, dan OCB. Namun, yang akan kita bahas di sini hanya 2 (CBC dan ECB).
 
-Di antara keduanya, mode ECB itu lebih lemah dari CBC, karena mode CBC memerlukan Initialization Vector (IV), sedangkan ECB tidak. Nah! IV di sini bisa kita umpamakan sebagai **kunci kedua**.
+Di antara keduanya, mode ECB itu lebih lemah dari CBC, karena mode CBC memerlukan Initialization Vector (IV), sedangkan ECB tidak. IV di sini bisa kita umpamakan sebagai **kunci kedua**.
 
 Contoh mode CBC (Cipher Block Chaining): 
 > Data + Key + IV = Encrypted
@@ -42,21 +42,32 @@ AES mode CBC:
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
+    var iv = CryptoJS.enc.Hex.parse('000102030405060708090a0b0c0d0e0f');
+
     function encryptText() {
         var key = CryptoJS.enc.Utf8.parse('KuNc1R4h4s14');
-        var iv = CryptoJS.lib.WordArray.random(16);
         var plaintext = document.getElementById("plaintext").value;
         var ciphertext = CryptoJS.AES.encrypt(plaintext, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }); 
         document.getElementById("ciphertext").value = ciphertext.toString();
+    }
+
+    function decryptText() {
+        var key = CryptoJS.enc.Utf8.parse('KuNc1R4h4s14');
+        var ciphertext = document.getElementById("ciphertext").value;
+        var decrypted = CryptoJS.AES.decrypt(ciphertext, key, {iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+        document.getElementById("decryptedtext").value = decrypted.toString(CryptoJS.enc.Utf8);
     }
 </script>
 
 <h2>AES.CBC</h2>
 <label for="plaintext">Data:</label><br>
 <textarea id="plaintext" rows="4" cols="50"></textarea><br><br>
-<button onclick="encryptText()">Encrypt</button><br><br>
+<button onclick="encryptText()">Encrypt</button>
+<button onclick="decryptText()">Decrypt</button><br><br>
 <label for="ciphertext">Data Terenkripsi:</label><br>
-<textarea id="ciphertext" rows="4" cols="50" readonly></textarea>
+<textarea id="ciphertext" rows="4" cols="50" readonly></textarea><br><br>
+<label for="decryptedtext">Data Terdekripsi:</label><br>
+<textarea id="decryptedtext" rows="4" cols="50" readonly></textarea><br><br>
 ```
 
 AES Mode ECB:
@@ -69,14 +80,24 @@ AES Mode ECB:
         var ciphertext = CryptoJS.AES.encrypt(plaintext, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 });
         document.getElementById("ciphertext").value = ciphertext.toString();
     }
+
+    function decryptText() {
+        var key = CryptoJS.enc.Utf8.parse('KuNc1R4h4s14');
+        var ciphertext = document.getElementById("ciphertext").value;
+        var decrypted = CryptoJS.AES.decrypt(ciphertext, key, { mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7 });
+        document.getElementById("decryptedtext").value = decrypted.toString(CryptoJS.enc.Utf8);
+    }
 </script>
 
 <h2>AES.ECB</h2>
 <label for="plaintext">Data:</label><br>
 <textarea id="plaintext" rows="4" cols="50"></textarea><br><br>
-<button onclick="encryptText()">Encrypt</button><br><br>
+<button onclick="encryptText()">Encrypt</button>
+<button onclick="decryptText()">Decrypt</button><br><br>
 <label for="ciphertext">Data Terenkripsi:</label><br>
 <textarea id="ciphertext" rows="4" cols="50" readonly></textarea><br><br>
+<label for="decryptedtext">Data Terdekripsi:</label><br>
+<textarea id="decryptedtext" rows="4" cols="50" readonly></textarea><br><br>
 ```
 
 Kita bisa melihat kode **javascript** di keduanya. Pada `CryptoJS.mode.CBC` di situ terlihat memanggil variabel `iv`, namun pada `CryptoJS.mode.ECB` itu tidak.
