@@ -1,9 +1,9 @@
 ---
-title: Catatan pemula tentang AES Encryption
+title: "Catatan Pemula: Tentang AES Encryption"
 date: 2024-03-01 07:00:00 +07:00
 modified: 2024-03-01 07:00:00 +07:00
 tags:
-  - "Cryptography"
+  - Cryptography
 description: Sebagai pemula di bidang kriptografi, saya akan mencoba menjelaskan tentang apa itu enkripsi AES sesederhana mungkin agar mudah dipahami.
 image: /assets/img/20240301-aes-encryption-cover.png
 ---
@@ -14,11 +14,11 @@ Sebagai pemula di bidang kriptografi, saya akan mencoba menjelaskan tentang apa 
 
 **Apa itu AES?**
 
-Advanced Encryption Standard (AES) adalah sebuah algoritma kriptografi yang digunakan untuk mengamankan data supaya terenkripsi dengan model kunci simetris (Symmetric) atau kunci tunggal. AES memiliki kunci dengan berbagai macam tingkatan seperti 128-bit, 192-bit, atau 256-bit (semakin panjang kunci yang digunakan, maka semakin kuat keamanannya).
+Advanced Encryption Standard (AES) adalah sebuah algoritma kriptografi yang digunakan untuk mengamankan data supaya terenkripsi dengan model kunci simetris (Symmetric) atau kunci tunggal. AES memiliki panjang kunci dengan berbagai macam tingkatan seperti 128-bit, 192-bit, atau 256-bit (semakin panjang kunci yang digunakan, maka semakin kuat keamanannya).
 
 # Symmetric vs Asymmetric  
   
-Karena AES adalah enkripsi yang memiliki model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal", secara garis besar enkripsi model simetris untuk mengenkripsi dan membuka enkripsi (decrypt) itu hanya menggunakan 1 kunci saja. Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu menggunakan kunci yang berbeda.  
+Karena AES adalah enkripsi yang memiliki model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal". Secara umum, enkripsi model simetris itu hanya menggunakan 1 kunci (yang sama) saat melakukan enkripsi maupun saat membuka enkripsinya (Decrypt). Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu perlu menggunakan kunci yang berbeda.  
 
 ![Symmetric Encryption vs Asymmetric Encryption](../../assets/img/20240301-aes-encryption-symmertic-vs-asymmetric.png)
 
@@ -26,17 +26,20 @@ Sebenarnya, AES bukanlah satu-satunya enkripsi yang menggunakan model simetris, 
 
 # Mode
 
-Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seperti CBC, OCB, CFB, OFB, CTR, GCM, CCM, XTS, SIV, EAX, dan OCB. Namun, yang akan kita bahas di sini hanya 2 (CBC dan ECB).
+- CBC (Cipher Block Chaining)
+- ECB (Electronic Codebook)
+
+Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seperti CBC, OCB, CFB, OFB, CTR, GCM, CCM, XTS, SIV, EAX, dan OCB. Namun, yang akan kita bahas di sini hanya 2, yaitu CBC dan ECB.
 
 Di antara keduanya, mode ECB itu lebih lemah dari CBC, karena mode CBC memerlukan Initialization Vector (IV), sedangkan ECB tidak. IV di sini bisa kita umpamakan sebagai **kunci kedua**.
 
-Contoh mode CBC (Cipher Block Chaining): 
+Contoh mode CBC: 
 > Data + Key + IV = Encrypted
 
-Contoh mode ECB (Electronic Codebook): 
+Contoh mode ECB: 
 > Data + Key = Encrypted
 
-Nah! secara teori seperti itu, secara praktiknya kita dapat menggunakan kode di bawah ini.
+Nah! Secara teori seperti itu, secara praktiknya kita dapat menggunakan kode di bawah ini.
 
 AES mode CBC:
 ```html
