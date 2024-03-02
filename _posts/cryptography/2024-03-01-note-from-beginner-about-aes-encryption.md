@@ -10,7 +10,7 @@ image: /assets/img/20240301-aes-encryption-cover.png
 
 Sebelum artikel ini dimulai, saya ingin mengucapkan terima kasih sama seseorang, karena dia yang membuat saya "melek" dengan apa itu kriptografi, Halo mas [Bayu Fedra](https://github.com/bayufedra)!
 
-Sebagai pemula di bidang kriptografi, saya akan mencoba menjelaskan tentang apa itu enkripsi AES sesederhana mungkin, semoga artikel dapat dikonsumsi untuk orang yang belum pernah sama sekali berkenalan dengan AES ini.
+Sebagai pemula di bidang kriptografi, saya akan mencoba menjelaskan tentang apa itu enkripsi AES dengan sesederhana mungkin, semoga artikel dapat dikonsumsi untuk orang yang belum pernah sama sekali berkenalan dengan AES ini.
 
 **Apa itu AES?**
 
@@ -107,11 +107,9 @@ Kita bisa melihat kode **javascript** di keduanya. Pada `CryptoJS.mode.CBC` di s
 
 # Initialization Vector (IV)  
 
-Initialization Vector (IV) adalah nilai acak yang digunakan untuk memulai proses enkripsi, tapi biasanya IV hanya digunakan pada mode enkripsi yang mengharuskan vektor inisialisasi (seperti mode CBC). IV sendiri bisa kita anggap sebagai kunci kedua.  
+Initialization Vector (IV) adalah nilai acak yang digunakan untuk memulai proses enkripsi, tapi biasanya IV hanya digunakan pada mode enkripsi yang mengharuskan vektor inisialisasi (seperti mode CBC). IV sendiri bisa kita anggap sebagai **kunci kedua** (namun hanya sebagai perumpamaan saja).
   
-Namun, tidak semua mode menggunakan IV. Sebagai contoh, dalam mode ECB, IV tidak digunakan karena setiap blok dienkripsi secara independen, sehingga tidak ada ketergantungan antarblok yang memerlukan IV.  
-  
-Oh iya! IV juga dapat kita sebut sebagai "kunci kedua" (namun hanya sebagai perumpamaan saja).
+Namun, tidak semua mode menggunakan IV. Sebagai contoh, dalam mode ECB, IV tidak digunakan karena setiap blok dienkripsi secara independen, sehingga tidak ada ketergantungan antarblok yang memerlukan IV.
 
 # Padding
 
@@ -121,7 +119,7 @@ Dalam kriptografi, Padding adalah proses menambahkan informasi tambahan ke pesan
 
 Ada beberapa skema Padding yang umum digunakan di dalam kriptografi, seperti PKCS#7, ISO/IEC 7816-4, dan ANSI X9.23. Seperti pada contoh kode di atas, implementasi AES menggunakan CryptoJS secara default menggunakan Padding PKCS#7.
 
-Nah! mekanisme Padding PKCS#7 ini akan secara otomatis menambahkan sesuatu pada byte terakhir (ruang kosong) agar mendapatkan nilai yang sama dengan jumlah byte yang diperlukan.
+Nah! Mekanisme Padding PKCS#7 ini akan secara otomatis menambahkan Byte terakhir (untuk mengisi kekosongan) agar mendapatkan nilai yang sama dengan jumlah Byte yang diperlukan.
 
 # Informasi Tambahan
 
