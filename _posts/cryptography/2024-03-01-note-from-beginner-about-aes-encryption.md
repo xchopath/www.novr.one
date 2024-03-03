@@ -1,7 +1,7 @@
 ---
 title: "Catatan Pemula: Tentang AES Encryption"
 date: 2024-03-01 07:00:00 +07:00
-modified: 2024-03-01 07:00:00 +07:00
+modified: 2024-03-03 07:00:00 +07:00
 tags:
   - Cryptography
 description: Sebagai pemula di bidang kriptografi, saya akan mencoba menjelaskan tentang apa itu enkripsi AES sesederhana mungkin agar mudah dipahami.
@@ -32,6 +32,7 @@ Enkripsi simetris selain AES:
 - Blowfish
 - RC4
 - Rabbit
+
 Dan masih banyak lagi.
 
 # Mode (Operation)
