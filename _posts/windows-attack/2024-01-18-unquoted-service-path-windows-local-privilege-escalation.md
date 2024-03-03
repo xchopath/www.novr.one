@@ -18,6 +18,8 @@ Dari sini mungkin bisa kita bayangkan, ketika ada Attacker yang mencoba memasuka
 
 <h1 class="header-group">Proof of Concept</h1>
 
+Untuk Exercise Lab-nya, kita bisa gunakan link [TryHackMe](https://tryhackme.com/room/windows10privesc) ini.
+
 # Enumeration
 
 Pada tahap awal, tentunya kita perlu melakukan enumerasi terlebih dahulu untuk menemukan Service yang tidak mengimplementasikan Path-nya dengan baik. Kita dapat menggunakan perintah **wmic** dengan detail command di bawah ini.
@@ -45,7 +47,7 @@ Nah! Di sini kita sudah menemukan bahwa folder **C:\\Program Files\\Unquoted Pat
 
 # Craft Malicious File (.exe)
 
-Pada tutorial ini, saya akan coba untuk menghindari penggunaan Tool dari **Metasploit**, akhirnya saya menemukan sebuah tutorial menarik dari [juggernaut-sec](https://juggernaut-sec.com/unquoted-service-paths/#Crafting_a_Custom_Exploit_to_Abuse_this_Misconfiguration), yang di mana author membuat Malicious File-nya tanpa menggunakan `msfvenom`.
+Pada tutorial ini, saya akan coba untuk menghindari penggunaan Tool dari **Metasploit**, akhirnya saya menemukan sebuah tutorial menarik dari [Juggernaut-sec](https://juggernaut-sec.com/unquoted-service-paths/#Crafting_a_Custom_Exploit_to_Abuse_this_Misconfiguration), yang di mana Author-nya membuat Malicious File untuk melakukan **Reverse Shell** tanpa menggunakan `msfvenom`.
 
 ### Malicious File "reverse-shell.c"
 
@@ -83,6 +85,15 @@ python3 -m http.server 8000
 
 Jika file exploit-nya sudah kita download, lalu kita pindahkan file tersebut ke dalam Service Path yang rentan. Namun, nama file perlu disesuaikan dengan nama Folder yang akan dipanggil (berdasarkan urutannya).
 
+Misal, ada sebuah Service yang memanggil:
+
+> **C:\\Program Files\\Unquoted Path Service\\Common Files\\unquotedpathservice.exe**
+
+Maka, eksploitasinya harus:
+
+> **C:\\Program Files\\Unquoted Path Service\\Common.exe**
+
+
 ```
 copy "C:\Users\<exploit file>" "C:\Program Files\<path name>\<first path name>.exe"
 ```
@@ -98,6 +109,6 @@ sc start "<service name>"
 
 ![](../../assets/img/20240303-unquoted-service-path-windows-pe-sc-start-service.png)
 
-Berhasil!
+Jika berhasil, kita akan mendapatkan akses shell-nya sebagai `NT AUTHORITY\SYSTEM`.
 
 ![](../../assets/img/20240303-unquoted-service-path-windows-pe-result.png)
