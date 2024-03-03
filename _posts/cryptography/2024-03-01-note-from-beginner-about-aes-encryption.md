@@ -18,7 +18,7 @@ Advanced Encryption Standard (AES) adalah sebuah algoritma kriptografi yang digu
 
 # Symmetric vs Asymmetric  
   
-Karena AES adalah enkripsi yang memiliki model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal". Secara umum, enkripsi model simetris itu hanya menggunakan 1 kunci (yang sama) saat melakukan enkripsi maupun saat membuka enkripsinya (Decrypt). Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu perlu menggunakan kunci yang berbeda.  
+Karena AES adalah enkripsi yang memiliki model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal". Secara umum, enkripsi model simetris itu hanya menggunakan 1 kunci (yang sama) saat melakukan enkripsi maupun saat membuka enkripsinya (Decrypt). Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu menggunakan kunci yang berbeda.  
 
 ![Symmetric Encryption vs Asymmetric Encryption](../../assets/img/20240301-aes-encryption-symmertic-vs-asymmetric.png)
 
@@ -107,7 +107,7 @@ Kita bisa melihat kode **javascript** di keduanya. Pada `CryptoJS.mode.CBC` di s
 
 # Initialization Vector (IV)  
 
-Initialization Vector (IV) adalah nilai acak yang digunakan untuk memulai proses enkripsi, tapi biasanya IV hanya digunakan pada mode enkripsi yang mengharuskan vektor inisialisasi (seperti mode CBC). IV sendiri bisa kita anggap sebagai **kunci kedua** (namun hanya sebagai perumpamaan saja).
+Initialization Vector (IV) adalah nilai acak yang digunakan untuk memulai proses enkripsi, tapi biasanya IV hanya digunakan pada mode enkripsi yang mengharuskan vektor inisialisasi (seperti mode CBC). IV sendiri bisa kita anggap sebagai **kunci kedua** (hanya sebagai perumpamaan saja).
   
 Namun, tidak semua mode menggunakan IV. Sebagai contoh, dalam mode ECB, IV tidak digunakan karena setiap blok dienkripsi secara independen, sehingga tidak ada ketergantungan antarblok yang memerlukan IV.
 
