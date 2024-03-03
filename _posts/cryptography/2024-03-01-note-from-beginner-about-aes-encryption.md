@@ -20,7 +20,9 @@ Advanced Encryption Standard (AES) adalah sebuah algoritma kriptografi yang digu
 
 # Symmetric vs Asymmetric  
   
-Karena AES adalah salah satu algoritma enkripsi yang menggunakan model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal". Secara umum, enkripsi model simetris itu hanya menggunakan 1 kunci (yang sama) saat melakukan enkripsi maupun saat membuka enkripsinya (Decrypt). Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu menggunakan kunci yang berbeda.  
+Karena AES adalah salah satu algoritma enkripsi yang menggunakan model Symmetric, maka ada baiknya kita juga harus mengetahui apa itu Symmetric dan Asymmetric. Untuk mendeskripsikan tentang apa itu Symmetric Encryption atau enkripsi simetris, kita hanya perlu mengingat sebuah kata yaitu "kunci tunggal". Secara umum, enkripsi model simetris itu hanya menggunakan 1 kunci (yang sama) saat melakukan enkripsi maupun saat membuka enkripsinya (Decryption).
+
+Berbeda dengan Asymmetric Encryption atau enkripsi asimetris, yang di mana saat mengenkripsi dan mendekripsi itu menggunakan kunci yang berbeda.  
 
 ![Symmetric Encryption vs Asymmetric Encryption](../../assets/img/20240301-aes-encryption-symmertic-vs-asymmetric.png)
 
@@ -40,7 +42,7 @@ Dan masih banyak lagi.
 1. CBC (Cipher Block Chaining)
 2. ECB (Electronic Codebook)
 
-Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seperti CBC, OCB, CFB, OFB, CTR, GCM, CCM, XTS, SIV, EAX, dan OCB. Namun, yang akan kita bahas di sini hanya 2, yaitu CBC dan ECB.
+Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seperti CBC, ECB, CFB, OFB, CTR, GCM, CCM, XTS, SIV, EAX, dan OCB. Namun, yang akan kita bahas di sini hanya 2, yaitu CBC dan ECB.
 
 Di antara keduanya, mode ECB itu lebih lemah dari CBC, karena mode CBC memerlukan Initialization Vector (IV), sedangkan ECB tidak. IV di sini bisa kita umpamakan sebagai **kunci kedua**.
 
@@ -114,7 +116,7 @@ AES Mode ECB:
 <textarea id="decryptedtext" rows="4" cols="50" readonly></textarea><br><br>
 ```
 
-Kita bisa melihat kode **javascript** di keduanya. Pada `CryptoJS.mode.CBC` di situ terlihat memanggil variabel `iv`, namun pada `CryptoJS.mode.ECB` itu tidak.
+Kita bisa melihat kode **Javascript** di keduanya. Pada `CryptoJS.mode.CBC` di situ terlihat memanggil variabel `iv`, namun pada `CryptoJS.mode.ECB` itu tidak. Oleh karena itulah mode ECB dianggap lebih lemah dari mode CBC.
 
 # Initialization Vector (IV)  
 
@@ -135,3 +137,5 @@ Nah! Mekanisme Padding PKCS#7 ini akan secara otomatis menambahkan Byte terakhir
 # Informasi Tambahan
 
 AES memiliki empat tahap kriptografi yaitu SubBytes, ShiftRows, MixColumns, dan AddRoundKey.
+
+> This post is still continuing...
