@@ -1,23 +1,23 @@
 ---
 layout: post
-title: "Token Impersonation (Potato Attack)"
+title: "WinPE: Token Impersonation (Potato Attack)"
 date: 2024-01-12 07:00:00 +0700
-categories: "Windows-Local-Privilege-Escalation"
+categories: Windows-Local-Privilege-Escalation
 ---
 
 ### TLDR; What is Token?
 
-Ketika kita Login ke dalam sistem, baik itu secara lokal, melalui jaringan, bertindak sebagai Service, atau bahkan langsung memanggil fungsi API LogonUser. Saat itu, paket otentikasi akan membuat sesi Login dan kemudian Local Security Authority (LSA) membuat token akses untuk pengguna tersebut.
+Ketika kita Login ke dalam sistem, baik itu secara lokal ataupun melalui jaringan, bertindak sebagai Service, atau bahkan langsung memanggil fungsi API LogonUser. Saat itu, paket otentikasi akan membuat sesi Login dan kemudian Local Security Authority (LSA) membuat token akses untuk pengguna tersebut.
 
 Token ini merepresentasikan berisi informasi:
 - ID sesi Login
 - User dan Group SID
-- Integrity level
-- Privilege yang dipegang oleh pengguna atau grup tempat pengguna berada
+- Integrity Level
+- Privilege yang dipegang oleh pengguna atau grup di tempat pengguna berada
 
-## Why "Impersonation" Exists?
+## Kenapa "Impersonation" ada?
 
-Impersonation adalah kemampuan untuk menjalankan sebuah tugas menggunakan hak istimewa atau identitas pengguna lain. Kita ambil contoh Service IIS (Web Server), ketika User yang menjalankan service IIS bukanlah `NT AUTHORITY\SYSTEM` (LocalSystem), maka proses yang dijalankan oleh service tersebut mungkin tidak memiliki privilege yang cukup untuk mengakses beberapa sumber daya di sistem. Namun, dengan menggunakan Impersonation, layanan IIS masih dapat menjalankan tugas tertentu dengan hak istimewa tanpa role khusus dan layanan masih dapat melanjutkan tugasnya tanpa harus terhenti hanya karena user IIS tidak memiliki Role yang setara dengan LocalSystem.
+Impersonation adalah kemampuan untuk menjalankan sebuah tugas menggunakan hak istimewa atau identitas pengguna lain. Kita ambil contoh Service IIS (Web Server), ketika User yang menjalankan service IIS bukanlah `NT AUTHORITY\SYSTEM` (Local System), maka proses yang dijalankan oleh service tersebut mungkin tidak memiliki privilege yang cukup untuk mengakses beberapa sumber daya di sistem. Namun, dengan menggunakan Impersonation, layanan IIS masih dapat menjalankan tugas tertentu dengan hak istimewa tanpa role khusus dan layanan masih dapat melanjutkan tugasnya tanpa harus terhenti hanya karena user IIS tidak memiliki Role yang setara dengan Local System.
 
 <br/>
 

