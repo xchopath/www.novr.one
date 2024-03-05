@@ -8,7 +8,7 @@ description: Ketika ada sebuah layanan (Service) yang memanggil file program (.e
 image: /assets/img/20240304-insecure-service-permissions-windows-privilege-escalation-cover.png
 ---
 
-Pada kesempatan kali ini, kita akan mendemokan salah satu serangan Local Privilege Escalation pada Windows System. Skenario ini dapat dilakukan ketika ada sebuah Service yang diberikan "Permission" yang berlebihan, sehingga pengguna biasa (low user) dapat melakukan konfigurasi ulang pada Service tersebut.
+Pada kesempatan kali ini, kita akan mendemokan salah satu serangan Local Privilege Escalation pada Windows System. Skenario ini dapat dilakukan ketika ada sebuah Service yang diberikan "Permission" berlebih, sehingga pengguna biasa (low user) dapat melakukan konfigurasi ulang pada Service tersebut.
 
 Kalian bisa bayangkan apa jadinya jika ada User yang dapat mengubah arah `BINARY PATH` pada Local Service di Windows?
 
@@ -23,7 +23,9 @@ Sebelum dilanjutkan, kita perlu menyiapkan terkait:
 1. accesschk.exe
 2. exploit.exe
 
-Untuk Tool `accesschk.exe` kita bisa mengunduhnya secara resmi melalui link [microsoft.com](https://learn.microsoft.com/en-us/sysinternals/downloads/accesschk) dan `exploit.exe` dapat kita **Compile** secara mandiri (tanpa harus menggunakan **msfvenom**) dengan cara mengikuti langkah-langkah di bawah ini.
+Untuk Tool `accesschk.exe` kita bisa mengunduhnya secara resmi melalui link [microsoft.com](https://learn.microsoft.com/en-us/sysinternals/downloads/accesschk).
+
+Dan untuk `exploit.exe`-nya itu dapat kita **Compile** secara mandiri (tanpa harus menggunakan **msfvenom**) dengan cara mengikuti langkah-langkah di bawah ini.
 
 ### reverse-shell.c
 
@@ -41,7 +43,7 @@ int main(){
 
 ### Compile
 
-Setelah itu kita lakukan kompilasi dari kode C menjadi sebuah file `.exe`.
+Setelah script di atas sudah dipersiapkan, maka kita lakukan kompilasi dari kode C menjadi sebuah file `.exe`.
 
 ```
 x86_64-w64-mingw32-gcc reverse-shell.c -o exploit.exe
@@ -51,7 +53,7 @@ x86_64-w64-mingw32-gcc reverse-shell.c -o exploit.exe
 
 ### Additional Note
 
-Sebagai catatan, di sini saya memindahkan file `exploit.exe` menggunakan HTTP Web Server dari Linux, untuk dipanggil via Windows.
+Sebagai catatan, di sini saya memindahkan file `exploit.exe` menggunakan HTTP Web Server di sisi Linux agar dapat dipanggil melalui mesin target (Windows).
 
 ```
 python3 -m http.server 8000
@@ -63,7 +65,7 @@ python3 -m http.server 8000
 
 # Enumeration
 
-Ok! Pertama-tama kita langsung gunakan tool `accesschk.exe` untuk melihat Service mana saja yang dapat dimodifikasi oleh User yang kita gunakan.
+Pertama-tama kita dapat gunakan Tool `accesschk.exe` untuk melihat Service mana saja yang dapat dimodifikasi oleh User yang sedang kita gunakan.
 
 ```
 .\accesschk.exe /accepteula -uwcv %username% *
@@ -71,11 +73,11 @@ Ok! Pertama-tama kita langsung gunakan tool `accesschk.exe` untuk melihat Servic
 
 ![accesschk.exe](../../assets/img/20240304-insecure-service-permissions-windows-privilege-escalation-accesschk.exe.png)
 
-Dari output **accesschk.exe** ini, kita mendapatkan sebuah Service yang bernama `daclsvc`, yang perlu kita perhatikan di sini yaitu Attribute `RW` dan Attribute `SERVICE_CHANGE_CONFIG`. Dengan ini dapat disimpulkan bahwa kita (sebagai low user) memiliki izin untuk mengubah konfigurasinya.
+Dari output **accesschk.exe** ini, kita mendapatkan sebuah Service yang bernama `daclsvc`, yang perlu kita perhatikan di sini yaitu Attribute `RW` dan Attribute `SERVICE_CHANGE_CONFIG`. Dari hasil ini dapat disimpulkan bahwa kita (sebagai low user) memiliki izin untuk mengubah konfigurasi Service-nya.
 
 # Exploit
 
-Setelah kita mengetahui bahwa kita mengantongi izin `SERVICE_CHANGE_CONFIG`, maka hal yang pertama kita coba yaitu memodifikasi `binpath` untuk memasukkan **exploit.exe** ke dalam Service-nya.
+Setelah kita mengetahui User yang sedang kita gunakan itu mempunyai izin `SERVICE_CHANGE_CONFIG`, maka hal yang akan kita lakukan selanjutnya yaitu memodifikasi `binpath` untuk memasukkan **exploit.exe** ke dalam konfigurasi Service-nya.
 
 ```
 sc config "<service name>" binpath="C:\<exploit file>"
@@ -83,7 +85,11 @@ sc config "<service name>" binpath="C:\<exploit file>"
 
 ![sc config change binpath](../../assets/img/20240304-insecure-service-permissions-windows-privilege-escalation-sc-config-binpath-modification.png)
 
-Jika berhasil kita akan mendapatkan sebuah pesan **SUCCESS**. Oh iya! Sebelum dilanjutkan kita harus mempersiapkan Listener pada Attack Host untuk menangkap koneksi Reverse Shell-nya. Jika sudah maka langkah selanjutnya yaitu memberhentikan Service-nya dan memulainya kembali.
+Kalau konfigurasinya berhasil kita ubah, maka kita akan mendapatkan sebuah pesan **ChangeServiceConfig SUCCESS**.
+
+> Persiapkan Listener pada Attacker Host terlebih dahulu untuk menangkap koneksi Reverse Shell-nya.  
+  
+Jika sudah, kita hanya perlu restart Service-nya saja, dengan cara memberhentikannya dan memulainya kembali.
 
 ```
 sc stop "<service name>"
