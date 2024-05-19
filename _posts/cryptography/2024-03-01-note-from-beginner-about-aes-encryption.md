@@ -46,15 +46,12 @@ Pada dasarnya AES memiliki lebih dari 10 mode operasi yang bisa digunakan, seper
 
 Di antara keduanya, mode ECB itu lebih lemah dari CBC, karena mode CBC memerlukan Initialization Vector (IV), sedangkan ECB tidak. IV di sini bisa kita umpamakan sebagai **kunci kedua**.
 
-Contoh mode CBC: 
-> Data + Key + IV = Encrypted
-
-Contoh mode ECB: 
-> Data + Key = Encrypted
-
 Nah! Secara teori seperti itu, secara praktiknya kita dapat menggunakan kode di bawah ini.
 
-AES mode CBC:
+### Contoh AES mode CBC:
+
+> Data + Key + IV = Encrypted
+
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
@@ -85,7 +82,10 @@ AES mode CBC:
 <textarea id="decryptedtext" rows="4" cols="50" readonly></textarea><br><br>
 ```
 
-AES Mode ECB:
+### Contoh AES Mode ECB:
+
+> Data + Key = Encrypted
+
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <script>
