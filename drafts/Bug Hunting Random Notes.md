@@ -6,7 +6,7 @@ Sample format
 
 Check Permission:
 ```sh
-"https://<APP ID>-dsn.algolia.net/1/keys/<API KEY>?x-algolia-application-id=<APP ID>&x-algolia-api-key=<API KEY>"
+curl -s "https://<APP ID>-dsn.algolia.net/1/keys/<API KEY>?x-algolia-application-id=<APP ID>&x-algolia-api-key=<API KEY>"
 ```
 
 List Indexes:
