@@ -1,3 +1,7 @@
+# Bug Hunting Preparation
+
+Halaman ini berisi catatan pribadi, tentang hal yang repetitif, namun, saya sendiri sering lupa.
+
 # Burp Suite Configurations
 
 ### Scope settings
