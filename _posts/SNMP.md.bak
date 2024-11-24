@@ -1,0 +1,9 @@
+
+```bash
+sudo apt-get install snmp-mibs-downloader -y
+sudo download-mibs
+```
+
+```bash
+snmpbulkwalk -c public -v2c <TARGET_IP> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
+```
