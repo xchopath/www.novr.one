@@ -42,6 +42,11 @@ Get-History
 type $env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
 ```
 
+Enumerate All Users via Administrator
+```powershell
+Get-WmiObject Win32_UserProfile | Where-Object { -not $_.Special -and $_.LocalPath } | ForEach-Object { $file = Join-Path -Path $_.LocalPath -ChildPath "AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt"; if (Test-Path $file) { "`n=== History for user: $($_.LocalPath) ===`n"; Get-Content $file } }
+```
+
 Script Block Logging.
 ```powershell
 Get-WinEvent -LogName "Microsoft-Windows-PowerShell/Operational" | Where-Object { $_.Id -eq 4104 } | Format-List -Property * | Out-File "scriptblocklogs.txt"
