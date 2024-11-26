@@ -81,6 +81,10 @@ Enter-PSSession DC01
 
 ## Auto Exploitation (Remote)
 
+Dengan script `impacket-raiseChild` ini, Kita bisa melakukannya secara Remote melalui mesin kita sendiri. Namun, inputnya sedikit berbeda, yaitu kita menggunakan `NTLM HASH` atau Password milik Administrator di **Child Domain atau DC02**, lalu Impacket akan melakukan enumerasi secara otomatis sampai dengan mendapatkan sesi Shell di DC01.
+
 ```bash
 impacket-raiseChild -target-exec <DOMAIN.LOCAL> -hashes :<DC02_ADMINISTRATOR_HASHES> '<CHILD.DOMAIN.LOCAL>/Administrator' -k
 ```
+
+![Impacket Raisechild](/images/2024-11-20-abusing-child-domain-trusts-to-escalate-domain-admin-to-enterprise-admin-impacket-raisechild.png)
