@@ -4,6 +4,8 @@ author: "novran"
 date: 2024-11-20 00:00:00 +0700
 categories: [Windows Privilege Escalation]
 tags: [Windows Privilege Escalation]
+image:
+  path: /images/2024-11-20-windows-privilege-escalation-sebackupprivilege-dump-sam-system-ntds-dit-banner.png
 ---
 
 Privilege `SeBackupPrivilege` di Windows dapat dimanfaatkan untuk eskalasi hak akses (Privilege Escalation) karena dengan ini pengguna memiliki kekuatan untuk melakukan operasi backup, termasuk membaca file atau direktori apa pun yang ada di sistem. Dengan ini kita dapat melakukan backup pada file `SAM`, `SYSTEM`, dan `NTDS.DIT` yang pada dasarnya file-file tersebut menyimpan kredensial yang tersimpan di dalam Operating System (termasuk kredensial milik Administrator sekali pun).
