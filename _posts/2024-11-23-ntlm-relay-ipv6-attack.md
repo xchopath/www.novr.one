@@ -2,8 +2,8 @@
 title: NTLM Relay IPv6 Attack
 author: "novran"
 date: 2024-11-23 00:00:00 +0700
-categories: [Active Directory Pentest, Windows Pentest]
-tags: [Active Directory Pentest, Windows Pentest]
+categories: [Active Directory Pentest]
+tags: [Active Directory Pentest]
 mermaid: true
 image:
   path: /images/2024-11-23-ntlm-relay-attack-banner.png
