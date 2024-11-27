@@ -1,10 +1,12 @@
 ---
-title: Windows Enumeration for Red Team
+title: Windows Machine Enumeration for Red Team
 author: "novran"
 date: 2024-11-27 00:00:00 +0700
 categories: [Windows Pentest]
 tags: [Windows Pentest]
 mermaid: true
+image:
+  path: /images/2024-11-27-window-machine-enumeration-for-red-team-banner.png
 ---
 
 ## Find Juicy Files
