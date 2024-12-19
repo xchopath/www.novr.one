@@ -69,7 +69,9 @@ wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-
 
 ## SMB (445/tcp)
 
-- [NetExec](https://github.com/Pennyw0rth/NetExec)
+Ada dua metode initial access yang dapat dicoba pada layanan SMB, yaitu "Null Session" dan "Guest Login".
+
+Untuk memeriksa service SMB, di sini saya menyarankan untuk menggunakan [NetExec](https://github.com/Pennyw0rth/NetExec).
 
 ### SMB Null Session
 
@@ -85,7 +87,7 @@ netexec smb <TARGET> -u 'guest' -p ''
 
 ### Other SMB Cheatsheet
 
-Download file recursively.
+Download semua file di dalam SMB secara recursive.
 
 ```bash
 nxc smb <TARGET> -u 'user' -p 'pass' -M spider_plus -o DOWNLOAD_FLAG=True
@@ -99,24 +101,32 @@ sudo apt-get install snmp-mibs-downloader -y
 sudo download-mibs
 ```
 
+Initial Access pada SNMP biasanya dilakukan untuk memperoleh kredensial yang tercatat di dalamnya. Dalam SNMP, kita menggunakan "community string" sebagai input (biasanya bernama "public").
+
 ### Get Info use Public Community String
 
 ```bash
 snmpbulkwalk -c public -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
 ```
 
+Namun, jika community string bernama "public" tidak tersedia, kita perlu melakukan Brute Force untuk menemukannya.
+
 ### Brute Force Community String
 
-SecLists
+Terdapat dua wordlist umum yang dapat digunakan, yaitu SecLists atau Wordlist dari Metasploit Framework.
 
 ```bash
 onesixtyone -c /usr/share/SecLists/Discovery/SNMP/snmp.txt <TARGET>
 ```
 
-metasploit-framework wordlist.
-
 ```bash
 onesixtyone -c /usr/share/metasploit-framework/data/wordlists/snmp_default_pass.txt <TARGET>
+```
+
+SNMP Walk menggunakan custom community string.
+
+```bash
+snmpbulkwalk -c <COMMUNITY_STRING_NAME> -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
 ```
 
 ## Found Weird Port? (Uncommon Services)
