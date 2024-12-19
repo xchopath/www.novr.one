@@ -9,6 +9,21 @@ image:
   path: /images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all.png
 ---
 
+Pada dasarnya, menemukan Initial Access saat ujian OSCP tidak terlalu sulit.
+
+Secara garis besar, maka hal apa saja yang mesti kalian ingat:
+- [FTP (21/tcp)](#ftp-21tcp)
+- [SMB (445/tcp)](#smb-445tcp)
+- [SNMP (161/udp)](#snmp-161udp)
+- [[Uncommon Services] Found Weird Port?](#found-weird-port-uncommon-services)
+- [Web Application (HTTP)](#web-application-http)
+- [Web Application: SSRF to Steal NTLM](#web-application-http)
+- [Web Application: MSSQL Injection to RCE](#web-application-http)
+- [Found Numerous Unnecessary Files?](#found-numerous-unnecessary-files)
+- [Found Protected File? Crack It!](#found-protected-file-crack-it)
+- [Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials](#some-files-pdf-docx-zip-db-etc-might-contain-credentials)
+- [Credential Spraying - FTP, RDP, SMB, SSH, and WinRM](#credential-spraying---ftp-rdp-smb-ssh-and-winrm)
+
 ## Port Scan
 
 Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
@@ -71,12 +86,14 @@ netexec smb <TARGET> -u '' -p ''
 netexec smb <TARGET> -u 'guest' -p ''
 ```
 
+Dengan memanfaatkan 2 kerentanan tersebut biasanya kita bisa mendapatkan List Local User yang ada di dalam OS dengan menggunakan [enum4linux](https://www.kali.org/tools/enum4linux/).
+
 ### Other SMB Cheatsheet
 
 Download semua file di dalam SMB secara recursive.
 
 ```bash
-nxc smb <TARGET> -u 'user' -p 'pass' -M spider_plus -o DOWNLOAD_FLAG=True
+nxc smb <TARGET> -u '<USERNAME>' -p '<PASSWORD>' -M spider_plus -o DOWNLOAD_FLAG=True
 ```
 
 ## SNMP (161/udp)
@@ -151,6 +168,10 @@ Google it
 
 - Try `admin:admin`
 - or Google it: `<APPLICATION_NAME> default credentials`
+
+## Web Application: SSRF to Steal NTLM
+
+## Web Application: MSSQL Injection to RCE
 
 ## Found Numerous Unnecessary Files?
 
