@@ -9,37 +9,23 @@ image:
   path: /images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all.png
 ---
 
-## Enumeration
+## Port Scan
 
-### Port Scan
+Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
 
-- [RustScan](https://github.com/RustScan/RustScan)
+Saat melakukan pengujian dengan beberapa tools, pilihan saya jatuh pada tools berikut:
+- [RustScan](https://github.com/RustScan/RustScan) (untuk scan port TCP dengan sangat cepat)
+- [UDPX](https://github.com/nullt3r/udpx) (untuk scan port UDP dengan cepat)
 
+TCP:
 ```bash
 rustscan --scripts none -a <TARGET>
 ```
 
-- [UDPX](https://github.com/nullt3r/udpx)
-
+UDP:
 ```bash
 udpx -c 500 -w 1000 -t <TARGET>
 ```
-
-### Web Enumeration
-
-- [Feroxbuster](https://github.com/epi052/feroxbuster) and [SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt)
-
-```bash
-feroxbuster -C 404 --auto-tune -k --wordlist /usr/share/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt --threads 100 --depth 2 -u <TARGET>
-```
-
-- [Dirsearch](https://github.com/maurosoria/dirsearch)
-
-```bash
-PYTHONWARNINGS="ignore" python3 ~/dirsearch/dirsearch.py -u <TARGET>
-```
-
-# Initial Access
 
 ## FTP (21/tcp)
 
@@ -141,6 +127,18 @@ port XXX exploit
 
 ### Enumerate directory and files
 
+- [Feroxbuster](https://github.com/epi052/feroxbuster) and [SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt)
+
+```bash
+feroxbuster -C 404 --auto-tune -k --wordlist /usr/share/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt --threads 100 --depth 2 -u <TARGET>
+```
+
+- [Dirsearch](https://github.com/maurosoria/dirsearch)
+
+```bash
+PYTHONWARNINGS="ignore" python3 ~/dirsearch/dirsearch.py -u <TARGET>
+```
+
 ### Found an underrated CMS, framework, or application?
 
 Google it
@@ -172,8 +170,11 @@ find . -type f | xargs -I {} exiftool {} | grep ^'Author'
 
 And spray it across all services or apps using `<username>:<username>` to log in.
 
-## Found Protected File?
+## Found Protected File? Crack It!
 
 You need to crack it.
 
 ![anything 2 john](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-file2john.png)
+
+## Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
+
