@@ -178,3 +178,4 @@ You need to crack it.
 
 ## Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
 
+## Credential Spraying - FTP, RDP, SMB, SSH, and WinRM
