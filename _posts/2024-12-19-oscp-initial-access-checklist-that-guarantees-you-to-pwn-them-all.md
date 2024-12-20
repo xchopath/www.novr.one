@@ -19,13 +19,18 @@ Saya akan merangkum tantangan-tantangan yang mungkin kalian temui saat mencari I
 - [X] [**SMB (445/tcp): Guest Login**](#smb-guest-login)
 - [X] [**SNMP (161/udp): Public Community Strings**](#snmp-public-community-string)
 - [X] [**SNMP (161/udp): Brute Force Community Strings**](#snmp-public-community-string)
-- [X] **Web Application (HTTP): Hidden Directories and Files Enumeration**
+- [X] [**Web Application (HTTP): Hidden Directories and Files Enumeration**](#web-application-http-hidden-directories-and-files-enumeration)
 - [X] [**Web Application (HTTP): SQL Injection (MSSQL to Command Execution)**](#web-application-sql-injection-mssql-to-command-execution)
 - [X] [**Web Application (HTTP): Server-Side Request Forgery in Windows Server (SSRF to Steal NTLM)**](#web-application-server-side-request-forgery-in-windows-server-steal-ntlm)
+- [X] [**Web Application (HTTP): Underrated CMS, Framework, or Application Exploit**](#web-application-underrated-cms-framework-or-application-exploit)
+- [X] [**Web Application (HTTP): Login Required**](#web-application-login-required)
+- [X] [**Uncommon Port and Unknown Service**](#uncommon-port-and-unknown-service)
+- [X] [**Gather Username List via Gathered File Attribute (exiftool)**](#gather-username-list-via-gathered-file-attribute-exiftool)
+- [X] [**Credential Spraying Technique - FTP, SSH, SMB, WinRM, and RDP**](#credential-spraying---ftp-ssh-smb-winrm-and-rdp)
 
 ## Port Scan
 
-Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
+Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya menyarankan untuk tidak menggunakan NMAP (disclaimer: jika tidak terlalu dibutuhkan) karena waktu yang tersedia saat ujian OSCP berlangsung sangat terbatas.
 
 Saat melakukan pengujian dengan beberapa tools, pilihan saya jatuh pada tools berikut:
 - [RustScan](https://github.com/RustScan/RustScan) (untuk scan port TCP dengan sangat cepat)
@@ -61,6 +66,14 @@ Selain itu, pada service FTP, kita dapat memanfaatkan tool [Hydra](https://www.k
 
 ```bash
 hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <TARGET> ftp
+```
+
+> Dump all files inside FTP
+
+Untuk catatan tambahan jika menemukan banyak file di dalam FTP-nya, kalian bisa men-download semua filenya sekaligus secara recursive menggunakan command di bawah ini:
+
+```bash
+wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
 ```
 
 ----------
@@ -158,6 +171,26 @@ snmpbulkwalk -c <COMMUNITY_STRING_NAME> -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExt
 
 ----------
 
+## Web Application (HTTP): Hidden Directories and Files Enumeration
+
+Pasti hal ini sudah umum di telinga kalian, karena enumerasi untuk menemukan directory and file sensitif ini adalah hal yang basic.
+
+> Tapi, apakah kita perlu menggunakan 2 wordlist?
+> 
+> Ya! Saya pernah mengalami stuck dan tidak menemukan apa-apa saat hanya menggunakan satu wordlist. Namun, dengan menggunakan wordlist dari **SecLists** dan **Dirsearch**, menurut saya itu sudah lebih dari cukup untuk membantu menyelesaikan ujian OSCP.
+
+Yang pertama, saya menggunakan tool [Feroxbuster](https://github.com/epi052/feroxbuster) dan Wordlist [SecLists (directory-list-2.3-medium.txt)](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt) agar hasilnya cepat dan maksimal (deep).
+
+```bash
+feroxbuster -C 404 --auto-tune -k --wordlist /usr/share/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt --threads 100 --depth 2 -u <TARGET>
+```
+
+Yang kedua, saya menggunakan [Dirsearch](https://github.com/maurosoria/dirsearch) untuk menemukan directory dan file umum, seperti .env, .git, dan lainnya.
+
+```bash
+PYTHONWARNINGS="ignore" python3 ~/dirsearch/dirsearch.py -u <TARGET>
+```
+
 ## Web Application: SQL Injection (MSSQL to Command Execution)
 
 Pada dasarnya SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, yang di mana kita dapat melakukan escape dengan cara menutup dan mengakhiri querynya dengan payload `';` dan menjalankan query lain.
@@ -201,114 +234,102 @@ hashcat -m 5600 '<HASH>' /usr/share/wordlists/rockyou.txt
 
 ![SSRF NTLM Cracked](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-ssrf-responder-ntlm-cracked.png)
 
+## Web Application: Underrated CMS, Framework, or Application Exploit
 
+Tak jarang kita menemukan CMS atau Application yang tidak umum bahkan tidak pernah kita lihat sama sekalu sebelumnya.
 
+- Solusinya simple, yaitu buka Google dan search dengan keyword `<APPLICATION_NAME> exploit`
 
+![Web Application: Underrated CMS, Framework, or Application Exploit](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-web-cms-public-exploit.jpeg)
 
+## Web Application: Login Required
 
+Jika kalian menemukan hal seperti ini, ada beberapa checklist yang perlu kalian lakukan
 
+- [ ] Login dengan payload SQL Injection `' OR 1=1 LIMIT 1 -- - `
+- [ ] Apakah ada Public Exploit yang bisa kalian manfaatkan untuk Log In?
+- [ ] Cari Default Credential-nya di Internet. OffSec sering menggunakan pattern `admin:admin` atau `user:user` (sesuaikan usernya dengan user yang sudah kalian peroleh).
 
+![Web Application Login Required](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-web-default-credential.png)
 
+----------
 
-# UNDER COSTRUCTION
-> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
-> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
-> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
-> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
-> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+## Uncommon Port and Unknown Service
 
+Tak jarang juga kita menemukan port yang tidak umum seperti 1978, 3001, dan lain-lain. Apalagi port tersebut bukanlah layanan HTTP, dan sialnya NMAP tidak dapat mendeteksi apa layanan di belakangnya.
 
+Maka solusinya, kita dapat langsung ke Google dan cari menggunakan keyword `port XXX exploit`
 
+![Uncommon Port and Unknown Service](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-uncommon-port-and-service.jpeg)
 
+----------
 
+## Gather Username List via Gathered File Attribute (exiftool)
 
-## 5. Found Weird Port? (Uncommon Services)
-
-Tak jarang kita menemukan Port dengan angka yang tidak umum, bahkan service-nya tidak akan dikenali oleh NMAP. Tapi, jangan khawatir, kita bisa memanfaatkan Google untuk hal ini.
-
-Google it.
-```
-port XXX exploit
-```
-
-## 6. Web Application (HTTP)
-
-### Enumerate directory and files
-
-- [Feroxbuster](https://github.com/epi052/feroxbuster) and [SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/directory-list-2.3-medium.txt)
+Agar tidak kaget saat merasa semua upaya Initial Access yang telah dilakukan sia-sia, tetapi kalian menemukan banyak file "sampah". Kalian dapat memeriksa filenya apakah tersimpan attribute penting atau tidak, dengan menggunakan `exiftool`.
 
 ```bash
-feroxbuster -C 404 --auto-tune -k --wordlist /usr/share/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt --threads 100 --depth 2 -u <TARGET>
-```
-
-- [Dirsearch](https://github.com/maurosoria/dirsearch)
-
-```bash
-PYTHONWARNINGS="ignore" python3 ~/dirsearch/dirsearch.py -u <TARGET>
-```
-
-### Found an underrated CMS, framework, or application?
-
-Google it
-```
-<APPLICATION_NAME> exploit
-<APPLICATION_NAME_AND_VERSION> exploit
-```
-
-### Does the application require login?
-
-- Try `admin:admin`
-- or Google it: `<APPLICATION_NAME> default credentials`
-
-## 9. Found Numerous Unnecessary Files?
-
-### Use exiftool to gather username list
-
-Kita bisa memeriksa attribute filenya dengan menggunakan command di bawah ini:
-
-```
 exiftool <FILENAME>
 ```
 
-Jika terdapat banyak file (PDF/DOCX):
+Mencari author file secara recursive:
 
-```sh
+```bash
 find . -type f | xargs -I {} exiftool {} | grep ^'Author'
 ```
 
-Dan Spray Credential-nya ke semua layanan atau aplikasi dengan menggunakan `<username>:<username>` untuk mendapatkan akses.
+![Gather Username List via Gathered File Attribute](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-exiftool-xargs-author.png)
 
-## 10. Found Protected File? Crack It!
+Jika sudah dapat, kalian bisa langsung coba untuk Credential Spray ke setiap Service dan Application dengan pattern login `user:user`.
 
-Kamu hanya perlu membukanya.
+----------
 
-![anything 2 john](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-file2john.png)
+## Credential Spraying - FTP, SSH, SMB, WinRM, and RDP
 
-## 11. Some Files (.pdf, .docx, .zip, .db, etc) "Might" Contain Credentials
-
-Jika menemukan file berupa .pdf, .docx, .zip, .db, dan lain-lain, jangan lupa untuk memeriksa apakah file tersebut menyimpan kredensial atau tidak. 
-
-## 12. Credential Spraying - FTP, RDP, SMB, SSH, and WinRM
-
-[Netexec](https://github.com/Pennyw0rth/NetExec) adalah tool yang sakti, di mana kita bisa melakukan Credential Spraying ke berbagai layanan seperti FTP, RDP, SMB, SSH, dan WinRM, bahkan dengan berbagai metode yang berbeda.
+Kita ketemu lagi sama [NetExec](https://github.com/Pennyw0rth/NetExec), menggunakan tool sakti ini kita dapat melakukan _Credential Spraying_ ke berbagai macam Service dan Protocol, dengan berbagai macam metode penempatan username dan password.
 
 ```bash
-netexec winrm <TARGET> -u username.txt -p password.txt
-netexec winrm <TARGET> -u 'john' -p password.txt
-netexec winrm <TARGET> -u username.txt -p 'Password123'
+# Multiple Usernames and Multiple Passwords
+netexec rdp <TARGET> -u username.txt -p password.txt
+
+# Single Username with Multiple Passwords
+netexec rdp <TARGET> -u 'john.doe' -p password.txt
+
+# Multiple Usernames with Single Password
+netexec rdp <TARGET> -u username.txt -p 'P@ssw0rd123'
 ```
 
-Kita dapat mengubah "winrm" dengan:
-- `ftp`
+Maka tinggal sesuaikan saja protokol apa yang digunakan di mesin target.
+
+```bash
+netexec ftp <TARGET> -u username.txt -p password.txt
+netexec ssh <TARGET> -u username.txt -p password.txt
+netexec smb <TARGET> -u username.txt -p password.txt
+netexec winrm <TARGET> -u username.txt -p password.txt
+netexec rdp <TARGET> -u username.txt -p password.txt
+```
+
+Bukan hanya itu, berikut ini list Protocol yang dapat kalian manfaatkan:
+- `mssql`
 - `smb`
+- `ftp`
+- `ldap` 
+- `nfs`
 - `rdp`
 - `ssh`
+- `vnc`
+- `winrm`
+- `wmi`
 
-## Other Cheatsheet
 
-Download file recursively.
 
-```bash
-wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
-```
 
+
+# THE ARTICLE STILL UPDATING...
+
+
+
+
+
+- Crack the Protected File (PDF, ZIP, etc)
+- Some Files (PDF, ZIP, etc) Might Contain Credentials
