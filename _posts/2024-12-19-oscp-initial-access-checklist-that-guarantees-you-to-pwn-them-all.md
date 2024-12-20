@@ -44,6 +44,8 @@ udpx -c 500 -w 1000 -t <TARGET>
 
 ## FTP (21/tcp)
 
+Initial Access pada FTP umumnya dapat dilakukan melalui dua cara, yaitu `FTP Anonymous Login` dan `FTP Default Credential Brute Force`.
+
 ### FTP Anonymous Login
 
 - [NetExec](https://github.com/Pennyw0rth/NetExec)
@@ -54,7 +56,7 @@ netexec ftp <TARGET> -u 'anonymous' -p 'anonymous'
 
 ### FTP Default Credential Brute Force
 
-[Hydra](https://www.kali.org/tools/hydra/) anf [SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt)
+Untuk menemukan Default Credential kita dapat memanfaatkan Tool [Hydra](https://www.kali.org/tools/hydra/) dan Wordlist dari [SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt).
 
 ```bash
 hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <TARGET> ftp
