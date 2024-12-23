@@ -1,0 +1,7 @@
+# Practical AES Decryption
+
+- Symmetric Encryption
+- How to determine whether it is AES or not? based on multiples of 16 bytes
+- AES Key can only be 16, 24, or 32 bytes long
+- AES Mode
+- Initialization Vector (IV) serves as the "Second Key"
