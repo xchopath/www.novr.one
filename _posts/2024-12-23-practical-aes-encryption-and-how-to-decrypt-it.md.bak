@@ -10,7 +10,9 @@ image:
   alt: Abusing Child Domain Trusts
 ---
 
-Belajar enkripsi memang sangat membosankan, karena biasanya terlalu banyak artikel yang lebih menekankan konsep teoritis dan tidak praktis dan teknis.
+Motivasi saya membuat artikel ini adalah karena pada awalnya saya merasa bahwa belajar enkripsi memang sangat membosankan. Banyak artikel lebih menekankan konsep teoritis, tetapi kurang praktis dan teknis. Di sisi lain, saya menyadari bahwa enkripsi AES (Advanced Encryption Standard) tidaklah semembosankan itu. Sebagai seorang pentester, saya juga menemukan banyak aplikasi, khususnya aplikasi mobile, yang menggunakan mekanisme enkripsi AES pada data HTTP request sebelum dikirimkan ke API. Oleh karena itu, saya rasa dengan mempelajari AES ini dapat menjadi skillset tambahan yang berguna untuk melakukan pentest.
+
+Agar tidak terlalu bertele-tele, berikut ini adalah poin-poin yang sudah saya rangkum agar lebih mudah dipahami.
 
 - [X] [Symmetric Encryption](#symmetric-encryption): Encrypt dan Decrypt menggunakan kunci yang sama persis.
 - [X] [AES Output Encoding](#aes-output-encoding): Base64 atau Hex?
