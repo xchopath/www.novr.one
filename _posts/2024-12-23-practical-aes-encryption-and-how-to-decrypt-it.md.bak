@@ -32,7 +32,9 @@ Hasil enkripsi (output) atau (biasa disebut) ciphertext itu biasanya dibungkus d
 1. `Base64`
 2. `Hex`
 
-> Karena kalau tidak di-encode maka bentuk aslinya adalah karakter-karakter yang tidak karuan bentuknya dan sangat riskan untuk pertukaran data karena beberapa protokol tidak akan mengenali karakter-karakter tersebut.
+> Kenapa harus di-encode setelah selesai dienkripsi?
+
+Karena kalau tidak di-encode maka bentuk aslinya adalah karakter-karakter yang tidak karuan bentuknya dan sangat riskan untuk pertukaran data karena beberapa protokol tidak akan mengenali karakter-karakter tersebut.
 
 ![AES without Encoding](/images/2024-12-23-practical-aes-encryption-and-how-to-decrypt-it-symmetric-encryption-random-characters-decoded.png)
 
@@ -42,7 +44,9 @@ Panjang kunci (Key Length) dalam AES hanya ada tiga opsi:
 - 24 byte (192 bit)
 - 32 byte (256 bit)
 
-Panjang kunci menentukan tingkat keamanan AES (semakin panjang kuncinya, semakin sulit untuk dilakukan brute force). Mungkin kalian pernah dengar tentang AES-128, AES-192, dan AES-256. Nah! Pada dasarnya itu hanya mengacu pada panjang kunci yang digunakan.
+Panjang kunci menentukan tingkat keamanan AES (semakin panjang kuncinya, semakin sulit untuk dilakukan brute force).
+
+Mungkin kalian pernah dengar tentang AES-128, AES-192, dan AES-256. Nah! Pada dasarnya itu hanya mengacu pada panjang kunci yang digunakan.
 
 Contoh Key pada AES-128:
 ```python3
