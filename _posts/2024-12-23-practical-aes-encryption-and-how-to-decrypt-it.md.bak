@@ -22,6 +22,10 @@ Belajar enkripsi memang sangat membosankan, karena biasanya terlalu banyak artik
 
 ## Symmetric Encryption
 
+Symmetric Encryption adalah sebuah metode enkripsi di mana key yang digunakan untuk proses encrypt dan decrypt itu hanya menggunakan satu key (key yang sama). Jadi untuk mempelajari AES ini tidak terlalu sulit.
+
+Berbeda dengan Asymmetric Encryption, yang menggunakan dua key yang berbeda, public key untuk encrypt dan private key decrypt (contohnya RSA).
+
 ## AES Output Encoding
 
 Hasil enkripsi (output) atau (biasa disebut) ciphertext itu biasanya dibungkus dalam bentuk encoding, yang paling umum digunakan yaitu:
