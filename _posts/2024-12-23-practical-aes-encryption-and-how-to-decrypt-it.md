@@ -102,7 +102,7 @@ init_vector = b'IV_would_be___16'
 Enkripsi AES akan selalu memproses data dalam kelipatan 16 byte. Jadi, meskipun data aslinya tidak berkelipatan 16 byte, hasil enkripsinya akan tetap menjadi kelipatan 16 byte. Selain itu, ukuran key-nya juga tidak memengaruhi ukuran data yang sudah diproses, di mana hasilnya akan tetap menjadi kelipatan 16 byte, apa pun bentuknya.
 
 Sebagai contoh di sini, untuk menentukan AES atau bukan dapat menggunakan rumus `cipher_bytes % 16`, seperti script di bawah ini:
-```python3
+```python
 import base64
 
 def is_AES(ciphertext_bytes):
