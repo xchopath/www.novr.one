@@ -12,13 +12,25 @@ image:
 
 Belajar enkripsi memang sangat membosankan, karena biasanya terlalu banyak artikel yang lebih menekankan konsep teoritis dan tidak praktis dan teknis.
 
+- [X] [Symmetric Encryption](#symmetric-encryption): Encrypt dan Decrypt menggunakan kunci yang sama persis.
+- [X] [AES Output Encoding](#aes-output-encoding): Base64 atau Hex?
+- [X] [AES Key Length](#aes-key-length): Panjang kunci AES hanya 16, 24, atau 32.
+- [X] [AES Mode](#aes-mode): ECB (tidak menggunakan IV) dan CBC (menggunakan IV).
+- [X] [Initialization Vector (IV)](#initialization-vector-iv): Konsep "kunci kedua" yang digunakan oleh beberapa mode pada AES
+- [X] [Cara mengenali AES atau bukan?](#cara-mengenali-aes-atau-bukan): Selalu berkelipatan 16 bytes (16, 32, 48, 64, dan seterusnya)
+- [X] [Padding](#padding): Yang membuat AES selalu berkelipatan 16 bytes
+
 ## Symmetric Encryption
 
 ## AES Output Encoding
 
-Hasil enkripsi (output) atau (biasa disebut) ciphertext itu biasanya dibungkus dalam bentuk encoding, yang paling umum digunakan yaitu `base64` dan `hex`.
+Hasil enkripsi (output) atau (biasa disebut) ciphertext itu biasanya dibungkus dalam bentuk encoding, yang paling umum digunakan yaitu:
+1. `Base64`
+2. `Hex`
 
 > Karena kalau tidak di-encode maka bentuk aslinya adalah karakter-karakter yang tidak karuan bentuknya dan sangat riskan untuk pertukaran data karena beberapa protokol tidak akan mengenali karakter-karakter tersebut.
+
+![AES without Encoding](/images/2024-12-23-practical-aes-encryption-and-how-to-decrypt-it-symmetric-encryption-random-characters-decoded.png)
 
 ## AES Key Length
 Panjang kunci (Key Length) dalam AES hanya ada tiga opsi:
@@ -75,4 +87,17 @@ print('Byte Length {byte_length}, Is it AES? {is_AES}'.format(byte_length=len(ci
 ```
 
 ## Padding
+
 Jika ukuran data tidak dalam kelipatan 16 byte, maka tugas padding di sini akan menambahkan blok terakhir agar mencapai ukuran yang sesuai (kelipatan 16).
+
+Misal, saya akan mencoba untuk mengenkripsi kata `ENCRYPT_ME` yang di mana kata tersebut hanya berukuran 10 bytes (atau 10 karakter).
+
+| 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+| E | N | C | R | Y | P | T | _ | M | E  |    |    |    |    |    |    |
+
+Nah! Inilah fungsi padding, yang di mana akan mengisi sisa bloknya (dari 11 sampai 16). Sehingga setelah proses enkripsinya selesai maka hasilnya akan tetap 16 bytes.
+
+|  1   |  2   |  3   |  4   |  5   |  6   |  7   |  8   |  9   |  10  |  11  |  12  |  13  |  14  |  15  |  16  |
+|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
+| 0x28 | 0x45 | 0x8b | 0xed | 0xbd | 0x21 | 0xb0 | 0x7d | 0x47 | 0x82 | 0xd0 | 0x56 | 0x36 | 0xcb | 0x5a | 0xff |
