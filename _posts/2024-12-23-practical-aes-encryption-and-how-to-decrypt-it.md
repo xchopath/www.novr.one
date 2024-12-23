@@ -130,7 +130,7 @@ Misal, saya akan mencoba untuk mengenkripsi kata `ENCRYPT_ME` yang di mana kata 
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | E | N | C | R | Y | P | T | _ | M | E  |    |    |    |    |    |    |
 
-Nah! Inilah fungsi padding, yang di mana akan mengisi sisa bloknya (dari 11 sampai 16). Sehingga setelah proses enkripsinya selesai maka hasilnya akan tetap 16 bytes.
+Nah! Inilah fungsi padding, yang di mana akan mengisi sisa bloknya yang kosong (dari 11 sampai 16). Sehingga setelah proses enkripsinya selesai maka hasilnya akan tetap 16 bytes.
 
 |  1   |  2   |  3   |  4   |  5   |  6   |  7   |  8   |  9   |  10  |  11  |  12  |  13  |  14  |  15  |  16  |
 |:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
