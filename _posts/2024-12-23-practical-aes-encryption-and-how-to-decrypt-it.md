@@ -51,18 +51,18 @@ Panjang kunci menentukan tingkat keamanan AES (semakin panjang kuncinya, semakin
 Mungkin kalian pernah dengar tentang AES-128, AES-192, dan AES-256. Nah! Pada dasarnya itu hanya mengacu pada panjang kunci yang digunakan.
 
 Contoh Key pada AES-128:
-```python3
+```python
 key = b'KeepItSecret_16_'
 ```
 
 Contoh Key pada AES-192:
-```python3
-key = b'Key+Dengan+Panjang__24__'
+```python
+key = b'Key_Dengan_Panjang__24__'
 ```
 
 Contoh Key pada AES-256:
-```python3
-key = b'+Str0ng3st_AES_KeY_1s__32_bytes+'
+```python
+key = b'_Str0ng3st_AES_KeY_1s__32_bytes!'
 ```
 
 ## AES Mode
