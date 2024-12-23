@@ -6,8 +6,8 @@ categories: [Cryptography]
 tags: [Cryptography]
 mermaid: true
 image:
-  path: /images/2024-11-20-abusing-child-domain-trusts-to-escalate-domain-admin-to-enterprise-admin-banner.png
-  alt: Abusing Child Domain Trusts
+  path: /images/
+  alt: Learn How to Decrypt AES
 ---
 
 Motivasi saya membuat artikel ini adalah karena pada awalnya saya merasa bahwa belajar enkripsi memang sangat membosankan. Banyak artikel lebih menekankan konsep teoritis, tetapi kurang praktis dan teknis. Di sisi lain, saya menyadari bahwa enkripsi AES (Advanced Encryption Standard) tidaklah semembosankan itu. Sebagai seorang pentester, saya juga menemukan banyak aplikasi, khususnya aplikasi mobile, yang menggunakan mekanisme enkripsi AES pada data HTTP request sebelum dikirimkan ke API. Oleh karena itu, saya rasa dengan mempelajari AES ini dapat menjadi skillset tambahan yang berguna untuk melakukan pentest.
@@ -66,15 +66,38 @@ key = b'+Str0ng3st_AES_KeY_1s__32_bytes+'
 ```
 
 ## AES Mode
-ECB, CBC, GCM
+
+Mode atau mode operasi pada AES ini yang nantinya akan berperan penting untuk menentukan bagaimana tiap blok (per-byte atau perhurufnya) akan diproses.
+
+Pada dasarnya, terdapat banyak mode yang bisa digunakan pada AES. Seperti CTR, CFB, GCM dan lain-lain. Namun, di sini yang akan kita bahas itu hanya CBC dan ECB saja agar tidak terlalu overwhelming.
+
+Perbedaan yang mencolok pada kedua mode tersebut adalah penggunaan IV (Initialization Vector). Yang di mana CBC itu memerlukan IV, sedangkan ECB tidak.
+
+> IV ini bisa kita analogikan sebagai kunci kedua (second key) untuk tambahan keamanan
+
+**ECB (Electronic Codebook)**
+
+Setiap blok plaintext (per-byte atau perhuruf), akan langsung diproses begitu saja. Pola hasil enkripsi akan terlihat, karena blok dari plaintext (yang sama) akan menghasilkan blok ciphertext yang sama (juga).
+
+**CBC (Cipher Block Chaining)**
+
+Berbeda dengan ECB, pada CBC blok pertama akan di-encrypt menggunakan IV (Initialization Vector). Lalu, setiap blok plaintext-nya (yang belum dienkripsi) akan di-XOR dengan blok ciphertext sebelumnya, sehingga akan menghasilkan pola enkripsi yang tidak terlihat (karena acak).
+
+Dengan penjelasan tersebut, maka kita dapat menyimpulkan bahwa mode ECB itu lebih lemah dari mode CBC dan mode-mode lainnya.
 
 ## Initialization Vector (IV)
 
+Initialization Vector (IV) bisa kita analogikan sebagai kunci kedua (second key). Namun, lebih tepatnya lagi itu seperti `salt` pada konsep `hashing`. Yang di mana akan menghadirkan ketidakpastian karena akan menciptakan pola acak pada tiap-tiap blok yang terenkripsi.
+
+Panjang karakter pada IV itu pasti 16 byte.
+
+Sebagai contoh:
 ```python3
 init_vector = b'IV_would_be___16'
 ```
 
 ## Cara mengenali AES atau bukan?
+
 Enkripsi AES akan selalu memproses data dalam kelipatan 16 byte. Jadi, meskipun data aslinya tidak berkelipatan 16 byte, hasil enkripsinya akan tetap menjadi kelipatan 16 byte. Selain itu, ukuran key-nya juga tidak memengaruhi ukuran data yang sudah diproses, di mana hasilnya akan tetap menjadi kelipatan 16 byte, apa pun bentuknya.
 
 Sebagai contoh di sini, untuk menentukan AES atau bukan dapat menggunakan rumus `cipher_bytes % 16`, seperti script di bawah ini:
