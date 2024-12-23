@@ -17,7 +17,7 @@ Agar tidak terlalu bertele-tele, berikut ini adalah poin-poin yang sudah saya ra
 - [X] [Symmetric Encryption](#symmetric-encryption): Encrypt dan Decrypt menggunakan kunci yang sama persis.
 - [X] [AES Output Encoding](#aes-output-encoding): Base64 atau Hex?
 - [X] [AES Key Length](#aes-key-length): Panjang kunci AES hanya 16, 24, atau 32.
-- [X] [AES Mode](#aes-mode): ECB (tidak menggunakan IV) dan CBC (menggunakan IV).
+- [X] [AES Operation Mode](#aes-operation-mode): ECB (tidak menggunakan IV) dan CBC (menggunakan IV).
 - [X] [Initialization Vector (IV)](#initialization-vector-iv): Konsep "kunci kedua" yang digunakan oleh beberapa mode pada AES
 - [X] [Cara mengenali AES atau bukan?](#cara-mengenali-aes-atau-bukan): Selalu berkelipatan 16 bytes (16, 32, 48, 64, dan seterusnya)
 - [X] [Padding](#padding): Yang membuat AES selalu berkelipatan 16 bytes
@@ -41,7 +41,8 @@ Karena kalau tidak di-encode maka bentuk aslinya adalah karakter-karakter yang t
 ![AES without Encoding](/images/2024-12-23-practical-aes-encryption-and-how-to-decrypt-it-symmetric-encryption-random-characters-decoded.png)
 
 ## AES Key Length
-Panjang kunci (Key Length) dalam AES hanya ada tiga opsi:
+
+Panjang kunci (Key Length) dalam AES hanya ada tiga varian:
 - 16 byte (128 bit)
 - 24 byte (192 bit)
 - 32 byte (256 bit)
@@ -65,7 +66,7 @@ Contoh Key pada AES-256:
 key = b'_Str0ng3st_AES_KeY_1s__32_bytes!'
 ```
 
-## AES Mode
+## AES Operation Mode
 
 Mode atau mode operasi pada AES ini yang nantinya akan berperan penting untuk menentukan bagaimana tiap blok (per-byte atau perhurufnya) akan diproses.
 
@@ -89,10 +90,10 @@ Dengan penjelasan tersebut, maka kita dapat menyimpulkan bahwa mode ECB itu lebi
 
 Initialization Vector (IV) bisa kita analogikan sebagai kunci kedua (second key). Namun, lebih tepatnya lagi itu seperti `salt` pada konsep `hashing`. Yang di mana akan menghadirkan ketidakpastian karena akan menciptakan pola acak pada tiap-tiap blok yang terenkripsi.
 
-Panjang karakter pada IV itu pasti 16 byte.
+Karakter pada IV memiliki panjang yang pasti, yaitu 16 byte dan tidak ada varian lain seperti key.
 
 Sebagai contoh:
-```python3
+```python
 init_vector = b'IV_would_be___16'
 ```
 
