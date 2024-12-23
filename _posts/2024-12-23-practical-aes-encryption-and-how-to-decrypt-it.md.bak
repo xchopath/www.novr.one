@@ -1,0 +1,78 @@
+---
+title: "Practical AES Encryption, How to Decrypt It?"
+author: "novran"
+date: 2024-12-23 00:00:00 +0700
+categories: [Cryptography]
+tags: [Cryptography]
+mermaid: true
+image:
+  path: /images/2024-11-20-abusing-child-domain-trusts-to-escalate-domain-admin-to-enterprise-admin-banner.png
+  alt: Abusing Child Domain Trusts
+---
+
+Belajar enkripsi memang sangat membosankan, karena biasanya terlalu banyak artikel yang lebih menekankan konsep teoritis dan tidak praktis dan teknis.
+
+## Symmetric Encryption
+
+## AES Output Encoding
+
+Hasil enkripsi (output) atau (biasa disebut) ciphertext itu biasanya dibungkus dalam bentuk encoding, yang paling umum digunakan yaitu `base64` dan `hex`.
+
+> Karena kalau tidak di-encode maka bentuk aslinya adalah karakter-karakter yang tidak karuan bentuknya dan sangat riskan untuk pertukaran data karena beberapa protokol tidak akan mengenali karakter-karakter tersebut.
+
+## AES Key Length
+Panjang kunci (Key Length) dalam AES hanya ada tiga opsi:
+- 16 byte (128 bit)
+- 24 byte (192 bit)
+- 32 byte (256 bit)
+
+Panjang kunci menentukan tingkat keamanan AES (semakin panjang kuncinya, semakin sulit untuk dilakukan brute force). Mungkin kalian pernah dengar tentang AES-128, AES-192, dan AES-256. Nah! Pada dasarnya itu hanya mengacu pada panjang kunci yang digunakan.
+
+Contoh Key pada AES-128:
+```python3
+key = b'KeepItSecret_16_'
+```
+
+Contoh Key pada AES-192:
+```python3
+key = b'Key+Dengan+Panjang__24__'
+```
+
+Contoh Key pada AES-256:
+```python3
+key = b'+Str0ng3st_AES_KeY_1s__32_bytes+'
+```
+
+## AES Mode
+ECB, CBC, GCM
+
+## Initialization Vector (IV)
+
+```python3
+init_vector = b'IV_would_be___16'
+```
+
+## Cara mengenali AES atau bukan?
+Enkripsi AES akan selalu memproses data dalam kelipatan 16 byte. Jadi, meskipun data aslinya tidak berkelipatan 16 byte, hasil enkripsinya akan tetap menjadi kelipatan 16 byte. Selain itu, ukuran key-nya juga tidak memengaruhi ukuran data yang sudah diproses, di mana hasilnya akan tetap menjadi kelipatan 16 byte, apa pun bentuknya.
+
+Sebagai contoh di sini, untuk menentukan AES atau bukan dapat menggunakan rumus `cipher_bytes % 16`, seperti script di bawah ini:
+```python3
+import base64
+
+def is_AES(ciphertext_bytes):
+    if len(ciphertext_bytes) % 16 == 0:
+    	return True
+    else:
+    	return False
+
+base64_ciphertext = "Tra+6tlhtCU9PM7cKWM2QcK3ag22lxTivZmRdd9FZVCRgeM79lWVWbWAGevO3HoeTPV/rI5EabHM+TdOBvxkc/51qLQ0qUh4rlbELka4yKQ="
+ciphertext_bytes = base64.b64decode(base64_ciphertext)
+
+print('Byte Length {byte_length}, Is it AES? {is_AES}'.format(byte_length=len(ciphertext_bytes), is_AES=is_AES(ciphertext_bytes)))
+
+# Byte Length 80, Is it AES? True
+# 80 adalah kelipatan 16
+```
+
+## Padding
+Jika ukuran data tidak dalam kelipatan 16 byte, maka tugas padding di sini akan menambahkan blok terakhir agar mencapai ukuran yang sesuai (kelipatan 16).
