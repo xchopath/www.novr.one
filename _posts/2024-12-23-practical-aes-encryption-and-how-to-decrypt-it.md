@@ -6,7 +6,7 @@ categories: [Cryptography]
 tags: [Cryptography]
 mermaid: true
 image:
-  path: /images/
+  path: /images/2024-12-23-practical-aes-encryption-and-how-to-decrypt-it-symmetric-encryption-banner.png
   alt: Learn How to Decrypt AES
 ---
 
@@ -24,9 +24,11 @@ Agar tidak terlalu bertele-tele, berikut ini adalah poin-poin yang sudah saya ra
 
 ## Symmetric Encryption
 
-Symmetric Encryption adalah sebuah metode enkripsi di mana key yang digunakan untuk proses encrypt dan decrypt itu hanya menggunakan satu key (key yang sama). Jadi untuk mempelajari AES ini tidak terlalu sulit.
+Symmetric Encryption adalah sebuah metode enkripsi di mana key yang digunakan untuk proses encrypt dan decrypt itu hanya menggunakan satu key (key yang sama). Jadi untuk mempelajari AES ini pada dasarnya tidak terlalu sulit.
 
 Berbeda dengan Asymmetric Encryption, yang menggunakan dua key yang berbeda, public key untuk encrypt dan private key decrypt (contohnya RSA).
+
+![Symmetric Encryption vs Asymmetric Encryption](/images/2024-12-23-practical-aes-encryption-and-how-to-decrypt-it-symmetric-encryption-symmetric-vs-asymmetric.png)
 
 ## AES Output Encoding
 
@@ -115,10 +117,9 @@ base64_ciphertext = "Tra+6tlhtCU9PM7cKWM2QcK3ag22lxTivZmRdd9FZVCRgeM79lWVWbWAGev
 ciphertext_bytes = base64.b64decode(base64_ciphertext)
 
 print('Byte Length {byte_length}, Is it AES? {is_AES}'.format(byte_length=len(ciphertext_bytes), is_AES=is_AES(ciphertext_bytes)))
-
-# Byte Length 80, Is it AES? True
-# 80 adalah kelipatan 16
 ```
+
+Output yang dihasilkan dari script-nya adalah `Byte Length 80, Is it AES? True`. Karena 80 itu masih dalam kelipatan 16, jadi dapat dipastikan (besar kemungkinan) ciphertext di atas dienkripsi menggunakan AES.
 
 ## Padding
 
