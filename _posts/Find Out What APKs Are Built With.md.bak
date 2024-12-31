@@ -1,0 +1,55 @@
+# Find Out What APKs Are Built With
+
+<table>
+  <thead>
+    <tr>
+      <th>Framework</th>
+      <th>Language</th>
+      <th>File Highlights</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Flutter</td>
+      <td>Dart</td>
+      <td>
+        libflutter.so<br>
+        libapp.so
+      </td>
+    </tr>
+    <tr>
+      <td>React Native</td>
+      <td>JavaScript</td>
+      <td>
+        index.android.bundle<br>
+        libhermes.so
+      </td>
+    </tr>
+    <tr>
+      <td>Ionic</td>
+      <td>Web (HTML/JS)</td>
+      <td>assets/www/index.html</td>
+    </tr>
+    <tr>
+      <td>Xamarin</td>
+      <td>C#</td>
+      <td>
+        libmonosgen-2.0.so<br>
+        assemblies/*.dll
+      </td>
+    </tr>
+    <tr>
+      <td>Unity</td>
+      <td>C#</td>
+      <td>
+        libunity.so<br>
+        libmono.so
+      </td>
+    </tr>
+    <tr>
+      <td>Kotlin/Java Native</td>
+      <td>Kotlin</td>
+      <td>*.kotlin</td>
+    </tr>
+  </tbody>
+</table>
